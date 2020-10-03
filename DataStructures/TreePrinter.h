@@ -23,11 +23,12 @@ class Node;
 
 class TreePrinter
 {
-	std::queue<Node<int>*>* pNodeQueue;
-	std::vector<struct Line*>* pLines;
+	std::queue<struct Line*>* pLineQueue;
+	std::vector<struct Line*>* pLineVector;
+	Tree<int>* pTree;
 	void CreateLines();
-	void AddLineToQueue();
+	void AddLineToQueue(Line* pLine);
 public:
-	TreePrinter(Tree<Node<int>*>* pTree);
+	TreePrinter(Tree<int>* pTree);
 	void Print();
 };

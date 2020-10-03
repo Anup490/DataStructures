@@ -4,8 +4,8 @@ template<typename T>
 struct Node
 {
 	T Value;
-	Node* LeftChild;
-	Node* RightChild;
+	Node<T>* LeftChild = 0;
+	Node<T>* RightChild = 0;
 };
 
 template<typename T>
