@@ -26,12 +26,12 @@ void TreePrinter::Print()
 
 }
 
-void CreateLines()
+void TreePrinter::CreateLines()
 {
 
 }
 
-void AddLineToQueue()
+void TreePrinter::AddLineToQueue()
 {
 
 }
