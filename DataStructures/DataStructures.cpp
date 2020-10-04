@@ -29,6 +29,7 @@ public:
 
 		Node<int>* pRootLeftLeftChild = pRootLeftChild->LeftChild;
 		pRootLeftLeftChild->Value = 4;
+		pRootLeftLeftChild->LeftChild = new Node<int>;
 
 		Node<int>* pRootLeftRightChild = pRootLeftChild->RightChild;
 		pRootLeftRightChild->Value = 5;
@@ -38,6 +39,13 @@ public:
 
 		Node<int>* pRootRightRightChild = pRootRightChild->RightChild;
 		pRootRightRightChild->Value = 7;
+
+		Node<int>* pRootLeftLeftLeftChild = pRootLeftLeftChild->LeftChild;
+		pRootLeftLeftLeftChild->Value = 8;
+		pRootLeftLeftLeftChild->LeftChild = new Node<int>;
+
+		Node<int>* pRootLeftLeftLeftLeftChild = pRootLeftLeftLeftChild->LeftChild;
+		pRootLeftLeftLeftLeftChild->Value = 9;
 	}
 
 	Node<int>* GetRootNode() override

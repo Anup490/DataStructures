@@ -36,12 +36,36 @@ void TreePrinter::Print()
 {
 	CreateLines();
 	int iPreviousLineNo = 0;
+	int iInitialGaps = 100;
+	int iItemGaps = iInitialGaps;
 	for (int i=0; i<pLineVector->size(); i++)
 	{
 		Line* pLine = pLineVector->at(i);
 		if ((i!=0) && (iPreviousLineNo != pLine->GetLineNumber()))
 		{
 			cout << endl;
+			cout << endl;
+			for (int i = 0; i < iInitialGaps; i++)
+			{
+				cout << " ";
+			}
+			iItemGaps = iInitialGaps * 2;
+			iInitialGaps/=2;
+		}
+		else if (iPreviousLineNo == pLine->GetLineNumber())
+		{
+			for (int i = 0; i < iItemGaps; i++)
+			{
+				cout << " ";
+			}
+		}
+		else if (i == 0)
+		{
+			for (int i = 0; i < iInitialGaps; i++)
+			{
+				cout << " ";
+			}
+			iInitialGaps/=2;
 		}
 		cout << pLine->GetNode()->Value;
 		iPreviousLineNo = pLine->GetLineNumber();
