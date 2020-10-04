@@ -32,41 +32,30 @@ TreePrinter::TreePrinter(Tree<int>* pTree) : pTree(pTree)
 	pLineVector = new vector<Line*>();
 }
 
+TreePrinter::~TreePrinter()
+{
+	for (int i=0; i<pLineQueue->size(); i++)
+	{
+		pLineQueue->pop();
+	}
+	for (int i = 0; i < pLineVector->size(); i++)
+	{
+		Line* pLine = pLineVector->at(i);
+		delete pLine;
+	}
+	delete pLineQueue;
+	delete pLineVector;
+}
+
 void TreePrinter::Print()
 {
 	CreateLines();
 	int iPreviousLineNo = 0;
 	int iInitialGaps = 100;
-	int iItemGaps = iInitialGaps;
 	for (int i=0; i<pLineVector->size(); i++)
 	{
 		Line* pLine = pLineVector->at(i);
-		if ((i!=0) && (iPreviousLineNo != pLine->GetLineNumber()))
-		{
-			cout << endl;
-			cout << endl;
-			for (int i = 0; i < iInitialGaps; i++)
-			{
-				cout << " ";
-			}
-			iItemGaps = iInitialGaps * 2;
-			iInitialGaps/=2;
-		}
-		else if (iPreviousLineNo == pLine->GetLineNumber())
-		{
-			for (int i = 0; i < iItemGaps; i++)
-			{
-				cout << " ";
-			}
-		}
-		else if (i == 0)
-		{
-			for (int i = 0; i < iInitialGaps; i++)
-			{
-				cout << " ";
-			}
-			iInitialGaps/=2;
-		}
+		PositionCursor(i == 0, iPreviousLineNo != pLine->GetLineNumber(), iInitialGaps);
 		cout << pLine->GetNode()->Value;
 		iPreviousLineNo = pLine->GetLineNumber();
 	}
@@ -77,6 +66,38 @@ void TreePrinter::CreateLines()
 	Line* pFirstLine = new Line(pTree->GetRootNode(), 1);
 	pLineQueue->push(pFirstLine);
 	AddLineToQueue(pLineQueue->front());
+}
+
+void TreePrinter::PositionCursor(bool bIsFirstItem, bool bIsNewLine, int& iInitialGaps)
+{
+	int iItemGaps = iInitialGaps * 4;
+	if (!bIsFirstItem && bIsNewLine)
+	{
+		AddGaps(true,iInitialGaps);
+		iInitialGaps /= 2;
+	}
+	else if (!bIsNewLine)
+	{
+		AddGaps(false,iItemGaps);
+	}
+	else if (bIsFirstItem)
+	{
+		AddGaps(false,iInitialGaps);
+		iInitialGaps /= 2;
+	}
+}
+
+void TreePrinter::AddGaps(bool bChangeLine, int& iGaps)
+{
+	if (bChangeLine)
+	{
+		cout << endl;
+		cout << endl;
+	}
+	for (int i = 0; i < iGaps; i++)
+	{
+		cout << " ";
+	}
 }
 
 void TreePrinter::AddLineToQueue(Line* pLine)

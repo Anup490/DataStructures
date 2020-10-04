@@ -27,8 +27,11 @@ class TreePrinter
 	std::vector<struct Line*>* pLineVector;
 	Tree<int>* pTree;
 	void CreateLines();
+	void PositionCursor(bool bIsFirstItem, bool bIsNewLine, int& iInitialGaps);
+	void AddGaps(bool bChangeLine,int& iGaps);
 	void AddLineToQueue(Line* pLine);
 public:
 	TreePrinter(Tree<int>* pTree);
+	~TreePrinter();
 	void Print();
 };
