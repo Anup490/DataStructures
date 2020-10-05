@@ -143,6 +143,7 @@
     <ClCompile Include="TreePrinter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AVLTree.h" />
     <ClInclude Include="Tree.h" />
     <ClInclude Include="TreePrinter.h" />
   </ItemGroup>
