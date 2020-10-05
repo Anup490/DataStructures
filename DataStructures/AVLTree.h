@@ -1,6 +1,5 @@
 #pragma once
 #include "Tree.h"
-#include <iostream>
 
 enum class ChildType
 {
@@ -176,7 +175,7 @@ class AVLTree : public Tree<T>
 
 	AVLNode<T>* RightLeftRotate(AVLNode<T>* pUNode)
 	{
-		pUNode->RightChild = RightRotate(static_cast<AVLNode<T>*>(pUNode->LeftChild));
+		pUNode->RightChild = RightRotate(static_cast<AVLNode<T>*>(pUNode->RightChild));
 		return LeftRotate(pUNode);
 	}
 

@@ -6,55 +6,63 @@
 template<typename T>
 class TestTree : public Tree<T>
 {
-	Node<T>* pRoot;
+	Node<T>* p1;
 
 	void AddItems()
 	{
-		pRoot->Value = 1;
-		pRoot->LeftChild = new Node<T>;
-		pRoot->RightChild = new Node<T>;
+		p1->Value = 50;
+		p1->LeftChild = new Node<T>;
+		p1->RightChild = new Node<T>;
 
-		Node<T>* pRootLeftChild = pRoot->LeftChild;
-		pRootLeftChild->Value = 2;
-		pRootLeftChild->LeftChild = new Node<T>;
-		pRootLeftChild->RightChild = new Node<T>;
+		Node<T>* p2 = p1->LeftChild;
+		p2->Value = 17;
+		p2->LeftChild = new Node<T>;
+		p2->RightChild = new Node<T>;
 
-		Node<T>* pRootRightChild = pRoot->RightChild;
-		pRootRightChild->Value = 3;
-		pRootRightChild->LeftChild = new Node<T>;
-		pRootRightChild->RightChild = new Node<T>;
+		Node<T>* p4 = p2->LeftChild;
+		p4->Value = 9;
+		p4->RightChild = new Node<T>;
 
-		Node<T>* pRootLeftLeftChild = pRootLeftChild->LeftChild;
-		pRootLeftLeftChild->Value = 4;
-		pRootLeftLeftChild->LeftChild = new Node<T>;
+		Node<T>* p5 = p2->RightChild;
+		p5->Value = 23;
+		p5->LeftChild = new Node<T>;
 
-		Node<T>* pRootLeftRightChild = pRootLeftChild->RightChild;
-		pRootLeftRightChild->Value = 5;
+		Node<T>* p7 = p4->RightChild;
+		p7->Value = 14;
+		p7->LeftChild = new Node<T>;
 
-		Node<T>* pRootRightLeftChild = pRootRightChild->LeftChild;
-		pRootRightLeftChild->Value = 6;
+		Node<T>* p9 = p7->LeftChild;
+		p9->Value = 12;
 
-		Node<T>* pRootRightRightChild = pRootRightChild->RightChild;
-		pRootRightRightChild->Value = 7;
+		Node<T>* p8 = p5->LeftChild;
+		p8->Value = 19;
 
-		Node<T>* pRootLeftLeftLeftChild = pRootLeftLeftChild->LeftChild;
-		pRootLeftLeftLeftChild->Value = 8;
-		pRootLeftLeftLeftChild->LeftChild = new Node<T>;
+		Node<T>* p3 = p1->RightChild;
+		p3->Value = 76;
+		p3->LeftChild = new Node<T>;
 
-		Node<T>* pRootLeftLeftLeftLeftChild = pRootLeftLeftLeftChild->LeftChild;
-		pRootLeftLeftLeftLeftChild->Value = 9;
+		Node<T>* p6 = p3->LeftChild;
+		p6->Value = 54;
+		p6->RightChild = new Node<T>;
+
+		Node<T>* p10 = p6->RightChild;
+		p10->Value = 72;
+		p10->LeftChild = new Node<T>;
+
+		Node<T>* p11 = p10->LeftChild;
+		p11->Value = 67;
 	}
 
 public:
 	TestTree()
 	{
-		pRoot = new Node<int>;
+		p1 = new Node<int>;
 		AddItems();
 	}
 
 	Node<T>* GetRootNode() override
 	{
-		return pRoot;
+		return p1;
 	}
 };
 
@@ -62,6 +70,16 @@ int main()
 {
 	TestTree<int> Test;
 	AVLTree<int> AVL(&Test);
-	TreePrinter Printer(&AVL);
-	Printer.Print();
+	std::cout << "UNBALANCED TREE" << std::endl;
+	std::cout << "------------------------------------------------" << std::endl;
+	TreePrinter UBTPrinter(&Test);
+	UBTPrinter.Print();
+	std::cout << std::endl;
+	std::cout << "------------------------------------------------" << std::endl;
+	std::cout << "BALANCED TREE" << std::endl;
+	std::cout << "------------------------------------------------" << std::endl;
+	TreePrinter BTPrinter(&AVL);
+	BTPrinter.Print();
+	std::cout << std::endl;
+	std::cout << "------------------------------------------------" << std::endl;
 }
