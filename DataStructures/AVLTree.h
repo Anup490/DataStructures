@@ -13,6 +13,7 @@ struct AVLNode : Node<T>
 	int iTreeHeight;
 	int iLTreeHeight;
 	int iRTreeHeight;
+
 	int GetBalanceFactor()
 	{
 		if (iLTreeHeight > iRTreeHeight)
@@ -22,6 +23,18 @@ struct AVLNode : Node<T>
 		else
 		{
 			return iRTreeHeight - iLTreeHeight;
+		}
+	}
+
+	void UpdateTreeHeight()
+	{
+		if (iLTreeHeight > iRTreeHeight)
+		{
+			iTreeHeight = iLTreeHeight + 1;
+		}
+		else
+		{
+			iTreeHeight = iRTreeHeight + 1;;
 		}
 	}
 };
@@ -91,14 +104,6 @@ class AVLTree : public Tree<T>
 		pAVLNode->iLTreeHeight = iLeftTreeHeight;
 		pAVLNode->iRTreeHeight = iRightTreeHeight;
 		pAVLNode->iTreeHeight = iTreeHeight;
-
-		std::cout << "----------------------------------------" << std::endl;
-		std::cout << "Node : " << pAVLNode->Value << std::endl;
-		std::cout << "LTreeHeight : " << pAVLNode->iLTreeHeight << std::endl;
-		std::cout << "RTreeHeight : " << pAVLNode->iRTreeHeight << std::endl;
-		std::cout << "TreeHeight : " << pAVLNode->iTreeHeight << std::endl;
-		std::cout << "----------------------------------------" << std::endl;
-		
 	}
 
 	void GotoSubTree(AVLNode<T>* pUNode, AVLNode<T>* pParent, ChildType Type)
@@ -106,11 +111,14 @@ class AVLTree : public Tree<T>
 		if (pUNode->LeftChild)
 		{
 			GotoSubTree(static_cast<AVLNode<T>*>(pUNode->LeftChild), pUNode, ChildType::Left);
+			pUNode->iLTreeHeight = static_cast<AVLNode<T>*>(pUNode->LeftChild)->iTreeHeight;
 		}
 		if (pUNode->RightChild)
 		{
 			GotoSubTree(static_cast<AVLNode<T>*>(pUNode->RightChild), pUNode, ChildType::Right);
+			pUNode->iRTreeHeight = static_cast<AVLNode<T>*>(pUNode->RightChild)->iTreeHeight;
 		}
+		pUNode->UpdateTreeHeight();
 		if (pUNode->GetBalanceFactor() > 1)
 		{
 			AVLNode<T>* pBNode = BalanceSubTree(pUNode);
@@ -176,7 +184,11 @@ class AVLTree : public Tree<T>
 	{
 		AVLNode<T>* pRightChild = static_cast<AVLNode<T>*>(pUNode->RightChild);
 		AttachChild(pRightChild, pUNode, ChildType::Left);
+		++(pRightChild->iLTreeHeight);
+		pRightChild->UpdateTreeHeight();
 		pUNode->RightChild = nullptr;
+		pUNode->iRTreeHeight = 0;
+		pUNode->UpdateTreeHeight();
 		return pRightChild;
 	}
 
@@ -184,7 +196,11 @@ class AVLTree : public Tree<T>
 	{
 		AVLNode<T>* pLeftChild = static_cast<AVLNode<T>*>(pUNode->LeftChild);
 		AttachChild(pLeftChild, pUNode, ChildType::Right);
+		++(pLeftChild->iRTreeHeight);
+		pLeftChild->UpdateTreeHeight();
 		pUNode->LeftChild = nullptr;
+		pUNode->iLTreeHeight = 0;
+		pUNode->UpdateTreeHeight();
 		return pLeftChild;
 	}
 
