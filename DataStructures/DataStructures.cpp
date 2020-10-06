@@ -2,6 +2,8 @@
 #include "TreePrinter.h"
 #include "Tree.h"
 #include "AVLTree.h"
+#include "Heap.h"
+#include <initializer_list>
 
 template<typename T>
 class TestTree : public Tree<T>
@@ -66,7 +68,7 @@ public:
 	}
 };
 
-int main()
+void test_AVL()
 {
 	TestTree<int> Test;
 	AVLTree<int> AVL(&Test);
@@ -82,4 +84,17 @@ int main()
 	BTPrinter.Print();
 	std::cout << std::endl;
 	std::cout << "------------------------------------------------" << std::endl;
+}
+
+void test_heap()
+{
+	initializer_list<int> List({35,33,42,10,14,19,27,44,26,31});
+	Heap Hp(&List);
+	TreePrinter Printer(&Hp);
+	Printer.Print();
+}
+
+int main()
+{
+	test_heap();
 }
