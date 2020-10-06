@@ -23,7 +23,7 @@ Node<int>* Heap::GetRootNode()
 
 void Heap::AddToHeap(Node<int>* pNode, int iItem)
 {
-	if (bAddNode)
+	if (bAddNode && (pNode->Value != -1))
 	{
 		if (!pNode->LeftChild)
 		{
@@ -31,7 +31,7 @@ void Heap::AddToHeap(Node<int>* pNode, int iItem)
 			pNode->LeftChild->Value = -1;
 			bAddNode = false;
 		}
-		else if (!pNode->RightChild)
+		else if ((!pNode->RightChild) && (pNode->LeftChild->Value != -1))
 		{
 			pNode->RightChild = new Node<int>;
 			pNode->RightChild->Value = -1;
