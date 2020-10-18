@@ -123,11 +123,11 @@ class AVLTree : public Tree<T>
 		AVLNode<T>* pRChild = static_cast<AVLNode<T>*>(pUNode->RightChild);
 		if (pRChild->iRTreeHeight > pRChild->iLTreeHeight)
 		{
-			return ApplyLeftRotationAndReturnRoot(pUNode);
+			return ApplyLeftRotationAndReturnNode(pUNode);
 		}
 		else
 		{
-			return ApplyRightLeftRotationAndReturnRoot(pUNode);
+			return ApplyRightLeftRotationAndReturnNode(pUNode);
 		}
 	}
 
@@ -136,27 +136,27 @@ class AVLTree : public Tree<T>
 		AVLNode<T>* pLChild = static_cast<AVLNode<T>*>(pUNode->LeftChild);
 		if (pLChild->iRTreeHeight > pLChild->iLTreeHeight)
 		{
-			return ApplyLeftRightRotationAndReturnRoot(pUNode);
+			return ApplyLeftRightRotationAndReturnNode(pUNode);
 		}
 		else
 		{
-			return ApplyRightRotationAndReturnRoot(pUNode);
+			return ApplyRightRotationAndReturnNode(pUNode);
 		}
 	}
 
-	AVLNode<T>* ApplyLeftRightRotationAndReturnRoot(AVLNode<T>* pUNode)
+	AVLNode<T>* ApplyLeftRightRotationAndReturnNode(AVLNode<T>* pUNode)
 	{
-		pUNode->LeftChild = ApplyLeftRotationAndReturnRoot(static_cast<AVLNode<T>*>(pUNode->LeftChild));
-		return ApplyRightRotationAndReturnRoot(pUNode);
+		pUNode->LeftChild = ApplyLeftRotationAndReturnNode(static_cast<AVLNode<T>*>(pUNode->LeftChild));
+		return ApplyRightRotationAndReturnNode(pUNode);
 	}
 
-	AVLNode<T>* ApplyRightLeftRotationAndReturnRoot(AVLNode<T>* pUNode)
+	AVLNode<T>* ApplyRightLeftRotationAndReturnNode(AVLNode<T>* pUNode)
 	{
-		pUNode->RightChild = ApplyRightRotationAndReturnRoot(static_cast<AVLNode<T>*>(pUNode->RightChild));
-		return ApplyLeftRotationAndReturnRoot(pUNode);
+		pUNode->RightChild = ApplyRightRotationAndReturnNode(static_cast<AVLNode<T>*>(pUNode->RightChild));
+		return ApplyLeftRotationAndReturnNode(pUNode);
 	}
 
-	AVLNode<T>* ApplyLeftRotationAndReturnRoot(AVLNode<T>* pUNode)
+	AVLNode<T>* ApplyLeftRotationAndReturnNode(AVLNode<T>* pUNode)
 	{
 		AVLNode<T>* pRightChild = static_cast<AVLNode<T>*>(pUNode->RightChild);
 		AttachChild(pRightChild, pUNode, ChildType::Left);
@@ -168,7 +168,7 @@ class AVLTree : public Tree<T>
 		return pRightChild;
 	}
 
-	AVLNode<T>* ApplyRightRotationAndReturnRoot(AVLNode<T>* pUNode)
+	AVLNode<T>* ApplyRightRotationAndReturnNode(AVLNode<T>* pUNode)
 	{
 		AVLNode<T>* pLeftChild = static_cast<AVLNode<T>*>(pUNode->LeftChild);
 		AttachChild(pLeftChild, pUNode, ChildType::Right);

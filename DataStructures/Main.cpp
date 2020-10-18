@@ -96,5 +96,5 @@ void test_heap()
 
 int main()
 {
-	test_heap();
+	test_AVL();
 }
