@@ -22,9 +22,12 @@ class Heap : public Tree<int>
 {
 	Node<int>* pRoot;
 	queue<Node<int>*>* pQueue;
-	bool bAddNode;
-	void AddToHeap(Node<int>* pNode, int iItem);
+	bool bShouldAddNode;
+	void CreateHeap(initializer_list<int>* pList);
+	void TraverseAndAddItem(Node<int>* pNode, int iItem);
+	void AddOneEmptyNodeIfNeeded(Node<int>* pParent);
+	void SwapIfNewIsSmaller(Node<int>* pNode, int& iNewItem);
 public:
-	Heap(std::initializer_list<int>* pList);
+	Heap(initializer_list<int>* pList);
 	Node<int>* GetRootNode() override;
 };

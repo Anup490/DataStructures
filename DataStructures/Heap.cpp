@@ -3,17 +3,12 @@
 #include <queue>
 #include <iostream>
 
-Heap::Heap(std::initializer_list<int>* pList)
+Heap::Heap(initializer_list<int>* pList)
 {
 	pRoot = new Node<int>;
 	pRoot->Value = -1;
 	pQueue = new queue<Node<int>*>;
-	for (int i : *pList)
-	{
-		bAddNode = true;
-		pQueue->push(pRoot);
-		AddToHeap(pQueue->front(), i);
-	}
+	CreateHeap(pList);
 }
 
 Node<int>* Heap::GetRootNode()
@@ -21,23 +16,19 @@ Node<int>* Heap::GetRootNode()
 	return pRoot;
 }
 
-void Heap::AddToHeap(Node<int>* pNode, int iItem)
+void Heap::CreateHeap(initializer_list<int>* pList)
 {
-	if (bAddNode && (pNode->Value != -1))
+	for (int i : *pList)
 	{
-		if (!pNode->LeftChild)
-		{
-			pNode->LeftChild = new Node<int>;
-			pNode->LeftChild->Value = -1;
-			bAddNode = false;
-		}
-		else if ((!pNode->RightChild) && (pNode->LeftChild->Value != -1))
-		{
-			pNode->RightChild = new Node<int>;
-			pNode->RightChild->Value = -1;
-			bAddNode = false;
-		}
+		bShouldAddNode = true;
+		pQueue->push(pRoot);
+		TraverseAndAddItem(pQueue->front(), i);
 	}
+}
+
+void Heap::TraverseAndAddItem(Node<int>* pNode, int iNewItem)
+{
+	AddOneEmptyNodeIfNeeded(pNode);
 	if (pNode->LeftChild)
 	{
 		pQueue->push(pNode->LeftChild);
@@ -48,16 +39,38 @@ void Heap::AddToHeap(Node<int>* pNode, int iItem)
 	}
 	Node<int>* pTopNode = pQueue->front();
 	pQueue->pop();
-	if ((iItem < pTopNode->Value) || (pTopNode->Value < 0))
-	{
-		int iTemp = pTopNode->Value;
-		pTopNode->Value = iItem;
-		iItem = iTemp;
-	}
+	SwapIfNewIsSmaller(pTopNode, iNewItem);
 	if (!pQueue->empty())
 	{
-		AddToHeap(pQueue->front(), iItem);
+		TraverseAndAddItem(pQueue->front(), iNewItem);
 	}
 }
 
+void Heap::AddOneEmptyNodeIfNeeded(Node<int>* pParent)
+{
+	if (bShouldAddNode && (pParent->Value != -1))
+	{
+		if (!pParent->LeftChild)
+		{
+			pParent->LeftChild = new Node<int>;
+			pParent->LeftChild->Value = -1;
+			bShouldAddNode = false;
+		}
+		else if ((!pParent->RightChild) && (pParent->LeftChild->Value != -1))
+		{
+			pParent->RightChild = new Node<int>;
+			pParent->RightChild->Value = -1;
+			bShouldAddNode = false;
+		}
+	}
+}
 
+void Heap::SwapIfNewIsSmaller(Node<int>* pNode, int& iNewItem)
+{
+	if ((iNewItem < pNode->Value) || (pNode->Value < 0))
+	{
+		int iTemp = pNode->Value;
+		pNode->Value = iNewItem;
+		iNewItem = iTemp;
+	}
+}
