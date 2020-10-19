@@ -27,7 +27,9 @@ class Heap : public Tree<int>
 	void TraverseAndAddItem(Node<int>* pNode, int iItem);
 	void AddOneEmptyNodeIfNeeded(Node<int>* pParent);
 	void SwapIfNewIsSmaller(Node<int>* pNode, int& iNewItem);
+	void DeleteNodes(Node<int>* pNode);
 public:
 	Heap(initializer_list<int>* pList);
+	~Heap();
 	Node<int>* GetRootNode() override;
 };

@@ -11,6 +11,11 @@ Heap::Heap(initializer_list<int>* pList)
 	CreateHeap(pList);
 }
 
+Heap::~Heap()
+{
+	DeleteNodes(pRoot);
+}
+
 Node<int>* Heap::GetRootNode()
 {
 	return pRoot;
@@ -73,4 +78,17 @@ void Heap::SwapIfNewIsSmaller(Node<int>* pNode, int& iNewItem)
 		pNode->Value = iNewItem;
 		iNewItem = iTemp;
 	}
+}
+
+void Heap::DeleteNodes(Node<int>* pNode)
+{
+	if (pNode->LeftChild)
+	{
+		DeleteNodes(pNode->LeftChild);
+	}
+	if (pNode->RightChild)
+	{
+		DeleteNodes(pNode->RightChild);
+	}
+	delete pNode;
 }
