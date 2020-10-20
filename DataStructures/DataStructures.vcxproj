@@ -139,10 +139,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DataStructures.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Heap.cpp" />
     <ClCompile Include="TreePrinter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AVLTree.h" />
+    <ClInclude Include="Heap.h" />
     <ClInclude Include="Tree.h" />
     <ClInclude Include="TreePrinter.h" />
   </ItemGroup>
