@@ -146,6 +146,7 @@
   <ItemGroup>
     <ClInclude Include="AVLTree.h" />
     <ClInclude Include="Heap.h" />
+    <ClInclude Include="RedBlackTree.h" />
     <ClInclude Include="Tree.h" />
     <ClInclude Include="TreePrinter.h" />
   </ItemGroup>

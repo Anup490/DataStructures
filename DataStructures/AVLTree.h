@@ -1,11 +1,6 @@
 #pragma once
 #include "Tree.h"
 
-enum class ChildType
-{
-	Left, Right, Root
-};
-
 template<typename T>
 struct AVLNode : Node<T>
 {

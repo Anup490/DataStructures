@@ -1,5 +1,10 @@
 #pragma once
 
+enum class ChildType
+{
+	Left, Right, Root
+};
+
 template<typename T>
 struct Node
 {

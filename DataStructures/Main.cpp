@@ -1,9 +1,10 @@
 #include <iostream>
+#include <initializer_list>
 #include "TreePrinter.h"
 #include "Tree.h"
 #include "AVLTree.h"
 #include "Heap.h"
-#include <initializer_list>
+#include "RedBlackTree.h"
 
 template<typename T>
 class TestTree : public Tree<T>
@@ -94,7 +95,27 @@ void test_heap()
 	Printer.Print();
 }
 
+void test_red_black_tree()
+{
+	RedBlackTree RBTree;
+	RBTree.Add(35);
+	RBTree.Add(33);
+	RBTree.Add(42);
+	RBTree.Add(10);
+	RBTree.Add(14);
+	RBTree.Add(19);
+	RBTree.Add(27);
+	RBTree.Add(44);
+	RBTree.Add(26);
+	RBTree.Add(31);
+	
+	RBTree.Delete(35);
+
+	TreePrinter Printer(&RBTree);
+	Printer.Print();
+}
+
 int main()
 {
-	test_heap();
+	test_red_black_tree();
 }
