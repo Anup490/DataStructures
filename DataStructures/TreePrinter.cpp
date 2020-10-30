@@ -1,5 +1,6 @@
 #include "TreePrinter.h"
 #include "Tree.h"
+#include "RedBlackTree.h"
 #include <vector>
 #include <queue>
 #include <iostream>
@@ -56,7 +57,7 @@ void TreePrinter::Print()
 	{
 		Line* pLine = pLineVector->at(i);
 		PositionCursor(i == 0, iPreviousLineNo != pLine->GetLineNumber(), iInitialGaps);
-		cout << pLine->GetNode()->Value;
+		cout << pLine->GetNode()->Value << GetColorIfRedBlack(pLine->GetNode());
 		iPreviousLineNo = pLine->GetLineNumber();
 	}
 }
@@ -119,4 +120,14 @@ void TreePrinter::AddLineToQueue(Line* pLine)
 	{
 		AddLineToQueue(pLineQueue->front());
 	}
+}
+
+char TreePrinter::GetColorIfRedBlack(Node<int>* pNode)
+{
+	RedBlackNode* pRBNode = static_cast<RedBlackNode*>(pNode);
+	if (pRBNode)
+	{
+		return (pRBNode->bIsRed) ? 'R' : 'B';
+	}
+	return 'X';
 }

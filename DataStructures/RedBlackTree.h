@@ -14,6 +14,21 @@ struct RedBlackNode : Node<int>
 
 class RedBlackTree : public BinaryTree
 {
+	void EnsureRedBlackRule(RedBlackNode* pNode, RedBlackNode* pParent);
+	void FixRedBlackIssue(RedBlackNode* pNode, RedBlackNode* pParent);
+	BalanceStrategy GetBalanceStrategy(RedBlackNode* pNode);
+	void ApplyRecolouring(RedBlackNode* pNode);
+	void ApplyRotation(RedBlackNode* pNode, RedBlackNode* pParent, BalanceStrategy Strategy);
+	void ApplyLeftRightRotation(RedBlackNode* pNode, RedBlackNode* pParent);
+	void ApplyRightLeftRotation(RedBlackNode* pNode, RedBlackNode* pParent);
+	void ApplyLeftRotation(RedBlackNode* pNode, RedBlackNode* pParent);
+	void ApplyRightRotation(RedBlackNode* pNode, RedBlackNode* pParent);
+	void AttachChild(RedBlackNode* pParent, RedBlackNode* pChild, ChildType Type);
+	void AttachAsLeftChild(RedBlackNode* pParent, RedBlackNode* pChild);
+	void AttachAsRightChild(RedBlackNode* pParent, RedBlackNode* pChild);
+	void CheckBlackHeight(RedBlackNode* pNode);
+	void SetBlackHeight(RedBlackNode* pNode);
+	void FixBlackHeight(RedBlackNode* pNode);
 	RedBlackNode* ToRedBlackNode(Node<int>* pNode);
 public:
 	RedBlackTree();

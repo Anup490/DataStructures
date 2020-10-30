@@ -30,6 +30,7 @@ class TreePrinter
 	void PositionCursor(bool bIsFirstItem, bool bIsNewLine, int& iInitialGaps);
 	void AddGaps(bool bChangeLine,int& iGaps);
 	void AddLineToQueue(Line* pLine);
+	char GetColorIfRedBlack(Node<int>* pNode);
 public:
 	TreePrinter(Tree<int>* pTree);
 	~TreePrinter();

@@ -29,7 +29,7 @@ class TestTree : public Tree<T>
 		Node<T>* p5 = p2->RightChild;
 		p5->Value = 23;
 		p5->LeftChild = new Node<T>;
-
+											
 		Node<T>* p7 = p4->RightChild;
 		p7->Value = 14;
 		p7->LeftChild = new Node<T>;
@@ -97,7 +97,7 @@ void test_heap()
 
 void test_red_black_tree()
 {
-	RedBlackTree RBTree;
+	BinaryTree RBTree;
 	RBTree.Add(35);
 	RBTree.Add(33);
 	RBTree.Add(42);
@@ -109,7 +109,8 @@ void test_red_black_tree()
 	RBTree.Add(26);
 	RBTree.Add(31);
 	
-	RBTree.Delete(35);
+
+	//RBTree.Delete(35);
 
 	TreePrinter Printer(&RBTree);
 	Printer.Print();
