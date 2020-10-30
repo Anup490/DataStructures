@@ -78,7 +78,10 @@ class AVLTree : public Tree<T>
 		pUNode->UpdateTreeHeight();
 		if (pUNode->GetBalanceFactor() > 1)
 		{
-			AttachBalancedNodeToParent(ToNodeWithBalancedTree(pUNode), pParent, Type);
+			AVLNode<T>* pBNode = ToNodeWithBalancedTree(pUNode);
+			TraverseByPostOrderAndMarkNodes(pBNode);
+			TraverseByPostOrderAndBalance(pBNode, pParent, Type);
+			AttachBalancedNodeToParent(pBNode, pParent, Type);
 		}
 	}
 
