@@ -139,12 +139,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BinaryTree.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Heap.cpp" />
+    <ClCompile Include="RedBlackTree.cpp" />
     <ClCompile Include="TreePrinter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AVLTree.h" />
+    <ClInclude Include="BinaryTree.h" />
     <ClInclude Include="Heap.h" />
     <ClInclude Include="RedBlackTree.h" />
     <ClInclude Include="Tree.h" />
