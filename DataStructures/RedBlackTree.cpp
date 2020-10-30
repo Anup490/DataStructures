@@ -167,6 +167,7 @@ void RedBlackTree::ApplyLeftRotation(RedBlackNode* pNode, RedBlackNode* pParent)
 	AttachChild(pNewNode, pNode, ChildType::Left);
 	pNode->RightChild = nullptr;
 	ReplaceNode(pNode, pNewNode, pParent);
+	ToRedBlackNode(pRoot)->bIsRed = false;
 }
 
 void RedBlackTree::ApplyRightRotation(RedBlackNode* pNode, RedBlackNode* pParent)
@@ -175,6 +176,7 @@ void RedBlackTree::ApplyRightRotation(RedBlackNode* pNode, RedBlackNode* pParent
 	AttachChild(pNewNode, pNode, ChildType::Right);
 	pNode->LeftChild = nullptr;
 	ReplaceNode(pNode, pNewNode, pParent);
+	ToRedBlackNode(pRoot)->bIsRed = false;
 }
 
 void RedBlackTree::AttachChild(RedBlackNode* pParent, RedBlackNode* pChild, ChildType Type)
@@ -231,7 +233,7 @@ void RedBlackTree::CheckBlackHeight(RedBlackNode* pNode)
 
 void RedBlackTree::SetBlackHeight(RedBlackNode* pNode)
 {
-	if (!(pNode->LeftChild) || !(pNode->RightChild))
+	if ((!(pNode->LeftChild)) && (!(pNode->RightChild)))
 	{
 		pNode->iBlackHeight = (pNode->bIsRed) ? 1 : 2;
 	}

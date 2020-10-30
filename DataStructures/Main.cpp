@@ -97,18 +97,17 @@ void test_heap()
 
 void test_red_black_tree()
 {
-	BinaryTree RBTree;
+	RedBlackTree RBTree;
 	RBTree.Add(35);
 	RBTree.Add(33);
 	RBTree.Add(42);
 	RBTree.Add(10);
 	RBTree.Add(14);
 	RBTree.Add(19);
-	RBTree.Add(27);
+	/*RBTree.Add(27);
 	RBTree.Add(44);
 	RBTree.Add(26);
-	RBTree.Add(31);
-	
+	RBTree.Add(31);*/
 
 	//RBTree.Delete(35);
 
