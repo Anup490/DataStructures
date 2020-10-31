@@ -75,30 +75,30 @@ BalanceStrategy RedBlackTree::GetBalanceStrategy(RedBlackNode* pNode)
 	{
 		RedBlackNode* pLChild = ToRedBlackNode(pNode->LeftChild);
 		RedBlackNode* pRChild = ToRedBlackNode(pNode->RightChild);
-		if (pLChild && (pLChild->bIsRed))
+		if (IsRedNode(pLChild) && IsRedNode(pLChild->LeftChild))
 		{
-			if ((pLChild->LeftChild) && (ToRedBlackNode(pLChild->LeftChild)->bIsRed))
-			{
-				return (pRChild && (pRChild->bIsRed)) ? (BalanceStrategy::Recolour) : (BalanceStrategy::RightRotation);
-			}
-			if ((pLChild->RightChild) && (ToRedBlackNode(pLChild->RightChild)->bIsRed))
-			{
-				return (pRChild && (pRChild->bIsRed)) ? (BalanceStrategy::Recolour) : (BalanceStrategy::LeftRightRotation);
-			}
+			return (IsRedNode(pRChild)) ? (BalanceStrategy::Recolour) : (BalanceStrategy::RightRotation);
 		}
-		else if (pRChild && (pRChild->bIsRed))
+		else if (IsRedNode(pLChild) && IsRedNode(pLChild->RightChild))
 		{
-			if ((pRChild->LeftChild) && (ToRedBlackNode(pRChild->LeftChild)->bIsRed))
-			{
-				return (pLChild && (pLChild->bIsRed)) ? (BalanceStrategy::Recolour) : (BalanceStrategy::RightLeftRotation);
-			}
-			if ((pRChild->RightChild) && (ToRedBlackNode(pRChild->RightChild)->bIsRed))
-			{
-				return (pLChild && (pLChild->bIsRed)) ? (BalanceStrategy::Recolour) : (BalanceStrategy::LeftRotation);
-			}
+			return (IsRedNode(pRChild)) ? (BalanceStrategy::Recolour) : (BalanceStrategy::LeftRightRotation);
+		}
+		else if (IsRedNode(pRChild) && IsRedNode(pLChild->LeftChild))
+		{
+			return (IsRedNode(pLChild)) ? (BalanceStrategy::Recolour) : (BalanceStrategy::RightLeftRotation);
+		}
+		else if (IsRedNode(pRChild) && IsRedNode(pLChild->RightChild))
+		{
+			return (IsRedNode(pLChild)) ? (BalanceStrategy::Recolour) : (BalanceStrategy::LeftRotation);
 		}
 	}
 	return BalanceStrategy::None;
+}
+
+bool RedBlackTree::IsRedNode(Node<int>* pNode)
+{
+	RedBlackNode* pRBNode = ToRedBlackNode(pNode);
+	return (pRBNode && (pRBNode->bIsRed));
 }
 
 void RedBlackTree::ApplyRecolouring(RedBlackNode* pNode)

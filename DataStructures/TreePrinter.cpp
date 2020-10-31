@@ -57,7 +57,17 @@ void TreePrinter::Print()
 	{
 		Line* pLine = pLineVector->at(i);
 		PositionCursor(i == 0, iPreviousLineNo != pLine->GetLineNumber(), iInitialGaps);
-		cout << pLine->GetNode()->Value << GetColorIfRedBlack(pLine->GetNode());
+
+		Node<int>* pNode = pLine->GetNode();
+		if (pNode)
+		{
+			cout << pNode->Value << GetColorIfRedBlack(pLine->GetNode());
+		}
+		else
+		{
+			cout << " ";
+		}
+		
 		iPreviousLineNo = pLine->GetLineNumber();
 	}
 }
@@ -104,16 +114,28 @@ void TreePrinter::AddGaps(bool bChangeLine, int& iGaps)
 void TreePrinter::AddLineToQueue(Line* pLine)
 {
 	Node<int>* pNode = pLine->GetNode();
-	if (pNode->LeftChild)
+	if (pNode && (pNode->LeftChild))
 	{
 		Line* pNewLine = new Line(pNode->LeftChild, pLine->GetLineNumber() + 1);
 		pLineQueue->push(pNewLine);
 	}
-	if (pNode->RightChild)
+	else if (pNode)
+	{
+		Line* pNewLine = new Line(nullptr, pLine->GetLineNumber() + 1);
+		pLineQueue->push(pNewLine);
+	}
+
+	if (pNode && (pNode->RightChild))
 	{
 		Line* pNewLine = new Line(pNode->RightChild, pLine->GetLineNumber() + 1);
 		pLineQueue->push(pNewLine);
 	}
+	else if (pNode)
+	{
+		Line* pNewLine = new Line(nullptr, pLine->GetLineNumber() + 1);
+		pLineQueue->push(pNewLine);
+	}
+
 	pLineVector->push_back(pLineQueue->front());
 	pLineQueue->pop();
 	if (!pLineQueue->empty())

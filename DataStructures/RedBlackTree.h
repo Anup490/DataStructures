@@ -17,6 +17,7 @@ class RedBlackTree : public BinaryTree
 	void EnsureRedBlackRule(RedBlackNode* pNode, RedBlackNode* pParent);
 	void FixRedBlackIssue(RedBlackNode* pNode, RedBlackNode* pParent);
 	BalanceStrategy GetBalanceStrategy(RedBlackNode* pNode);
+	bool IsRedNode(Node<int>* pNode);
 	void ApplyRecolouring(RedBlackNode* pNode);
 	void ApplyRotation(RedBlackNode* pNode, RedBlackNode* pParent, BalanceStrategy Strategy);
 	void ApplyLeftRightRotation(RedBlackNode* pNode, RedBlackNode* pParent);
