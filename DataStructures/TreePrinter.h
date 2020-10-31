@@ -27,9 +27,11 @@ class TreePrinter
 	std::vector<struct Line*>* pLineVector;
 	Tree<int>* pTree;
 	void CreateLines();
+	void AddLineToQueue(Line* pLine);
+	void PushChildInQueue(Node<int>* pNode, enum class ChildType Type, Line* pLine);
 	void PositionCursor(bool bIsFirstItem, bool bIsNewLine, int& iInitialGaps);
 	void AddGaps(bool bChangeLine,int& iGaps);
-	void AddLineToQueue(Line* pLine);
+	void PrintLine(Line* pLine);
 	char GetColorIfRedBlack(Node<int>* pNode);
 public:
 	TreePrinter(Tree<int>* pTree);

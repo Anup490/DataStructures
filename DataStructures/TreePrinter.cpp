@@ -57,17 +57,7 @@ void TreePrinter::Print()
 	{
 		Line* pLine = pLineVector->at(i);
 		PositionCursor(i == 0, iPreviousLineNo != pLine->GetLineNumber(), iInitialGaps);
-
-		Node<int>* pNode = pLine->GetNode();
-		if (pNode)
-		{
-			cout << pNode->Value << GetColorIfRedBlack(pLine->GetNode());
-		}
-		else
-		{
-			cout << " ";
-		}
-		
+		PrintLine(pLine);
 		iPreviousLineNo = pLine->GetLineNumber();
 	}
 }
@@ -77,6 +67,38 @@ void TreePrinter::CreateLines()
 	Line* pFirstLine = new Line(pTree->GetRootNode(), 1);
 	pLineQueue->push(pFirstLine);
 	AddLineToQueue(pLineQueue->front());
+}
+
+void TreePrinter::AddLineToQueue(Line* pLine)
+{
+	Node<int>* pNode = pLine->GetNode();
+	PushChildInQueue(pNode, ChildType::Left, pLine);
+	PushChildInQueue(pNode, ChildType::Right, pLine);
+	pLineVector->push_back(pLineQueue->front());
+	pLineQueue->pop();
+	if (!pLineQueue->empty())
+	{
+		AddLineToQueue(pLineQueue->front());
+	}
+}
+
+void TreePrinter::PushChildInQueue(Node<int>* pNode, ChildType Type, Line* pLine)
+{
+	if ((Type == ChildType::Left) && pNode && (pNode->LeftChild))
+	{
+		Line* pNewLine = new Line(pNode->LeftChild, pLine->GetLineNumber() + 1);
+		pLineQueue->push(pNewLine);
+	}
+	else if ((Type == ChildType::Right) && pNode && (pNode->RightChild))
+	{
+		Line* pNewLine = new Line(pNode->RightChild, pLine->GetLineNumber() + 1);
+		pLineQueue->push(pNewLine);
+	}
+	else if (pNode)
+	{
+		Line* pNewLine = new Line(nullptr, pLine->GetLineNumber() + 1);
+		pLineQueue->push(pNewLine);
+	}
 }
 
 void TreePrinter::PositionCursor(bool bIsFirstItem, bool bIsNewLine, int& iInitialGaps)
@@ -111,36 +133,16 @@ void TreePrinter::AddGaps(bool bChangeLine, int& iGaps)
 	}
 }
 
-void TreePrinter::AddLineToQueue(Line* pLine)
+void TreePrinter::PrintLine(Line* pLine)
 {
 	Node<int>* pNode = pLine->GetNode();
-	if (pNode && (pNode->LeftChild))
+	if (pNode)
 	{
-		Line* pNewLine = new Line(pNode->LeftChild, pLine->GetLineNumber() + 1);
-		pLineQueue->push(pNewLine);
+		cout << pNode->Value << GetColorIfRedBlack(pLine->GetNode());
 	}
-	else if (pNode)
+	else
 	{
-		Line* pNewLine = new Line(nullptr, pLine->GetLineNumber() + 1);
-		pLineQueue->push(pNewLine);
-	}
-
-	if (pNode && (pNode->RightChild))
-	{
-		Line* pNewLine = new Line(pNode->RightChild, pLine->GetLineNumber() + 1);
-		pLineQueue->push(pNewLine);
-	}
-	else if (pNode)
-	{
-		Line* pNewLine = new Line(nullptr, pLine->GetLineNumber() + 1);
-		pLineQueue->push(pNewLine);
-	}
-
-	pLineVector->push_back(pLineQueue->front());
-	pLineQueue->pop();
-	if (!pLineQueue->empty())
-	{
-		AddLineToQueue(pLineQueue->front());
+		cout << " ";
 	}
 }
 
