@@ -5,6 +5,11 @@ BinaryTree::BinaryTree()
 	pRoot = 0;
 }
 
+BinaryTree::~BinaryTree()
+{
+	DeleteNodes(pRoot);
+}
+
 void BinaryTree::Add(int iValue)
 {
 	if (pRoot)
@@ -73,6 +78,38 @@ void BinaryTree::ApplyBinaryDeletion(Node<int>* pParent, Node<int>* pNode, int i
 	}
 }
 
+void BinaryTree::ReplaceNode(Node<int>* pOld, Node<int>* pNew, Node<int>* pParent)
+{
+	if (pParent)
+	{
+		if ((pParent->LeftChild) == pOld)
+		{
+			pParent->LeftChild = pNew;
+		}
+		else if ((pParent->RightChild) == pOld)
+		{
+			pParent->RightChild = pNew;
+		}
+	}
+	else
+	{
+		pRoot = pNew;
+	}
+}
+
+void BinaryTree::DeleteNodes(Node<int>* pNode)
+{
+	if (pNode->LeftChild)
+	{
+		DeleteNodes(pNode->LeftChild);
+	}
+	if (pNode->RightChild)
+	{
+		DeleteNodes(pNode->RightChild);
+	}
+	delete pNode;
+}
+
 Node<int>* BinaryTree::GetSuccessor(Node<int>* pNode)
 {
 	Node<int>* pSuccessorNode = nullptr;
@@ -110,24 +147,5 @@ void BinaryTree::AttachToRightSubTree(Node<int>* pNode, Node<int>* pParent, Chil
 		{
 			pParent->RightChild = pNode;
 		}
-	}
-}
-
-void BinaryTree::ReplaceNode(Node<int>* pOld, Node<int>* pNew, Node<int>* pParent)
-{
-	if (pParent)
-	{
-		if ((pParent->LeftChild) == pOld)
-		{
-			pParent->LeftChild = pNew;
-		}
-		else if ((pParent->RightChild) == pOld)
-		{
-			pParent->RightChild = pNew;
-		}
-	}
-	else
-	{
-		pRoot = pNew;
 	}
 }

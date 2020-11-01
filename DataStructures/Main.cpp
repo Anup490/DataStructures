@@ -125,12 +125,12 @@ void test_red_black_tree()
 
 	//RBTree.Delete(35);
 
-	/*std::cout << "AVL TREE" << std::endl;
-	std::cout << "------------------------------------------------" << std::endl;
-	TreePrinter AVLTPrinter(&AVL);
-	AVLTPrinter.Print();
-	std::cout << std::endl;
-	std::cout << "------------------------------------------------" << std::endl;*/
+	//std::cout << "AVL TREE" << std::endl;
+	//std::cout << "------------------------------------------------" << std::endl;
+	//TreePrinter AVLTPrinter(&AVL);
+	//AVLTPrinter.Print();
+	//std::cout << std::endl;
+	//std::cout << "------------------------------------------------" << std::endl;
 	std::cout << "RED BLACK TREE" << std::endl;
 	std::cout << "------------------------------------------------" << std::endl;
 	TreePrinter RBTPrinter(&RBTree);

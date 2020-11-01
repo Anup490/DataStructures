@@ -42,124 +42,55 @@ void RedBlackTree::UpdateBlackHeight(RedBlackNode* pNode)
 	{
 		UpdateBlackHeight(ToRedBlackNode(pNode->RightChild));
 	}
-
 	RedBlackNode* pLChild = ToRedBlackNode(pNode->LeftChild);
 	RedBlackNode* pRChild = ToRedBlackNode(pNode->RightChild);
+	BalanceChildrenBlackHeight(pLChild, pRChild);
+	int iChildHeight = (pLChild && pRChild) ? (pLChild->iBlackHeight) : 1;
+	pNode->iBlackHeight = (pNode->bIsRed) ? iChildHeight : ++iChildHeight;
+}
 
-	if (!pRChild && !pLChild)
+void RedBlackTree::BalanceChildrenBlackHeight(RedBlackNode* pLChild, RedBlackNode* pRChild)
+{
+	if (!pRChild && pLChild && ((pLChild->iBlackHeight) != 1))
 	{
-		pNode->iBlackHeight = (pNode->bIsRed) ? 1 : 2;
+		ReduceBlackHeight(pLChild);
 	}
-	else if (!pRChild)
+	else if (!pLChild && pRChild && ((pRChild->iBlackHeight) != 1))
 	{
-		if ((pLChild->iBlackHeight) != 1)
-		{
-			if (pLChild->bIsRed)
-			{
-				RedBlackNode* pLLChild = ToRedBlackNode(pLChild->LeftChild);
-				RedBlackNode* pLRChild = ToRedBlackNode(pLChild->RightChild);
-				if (pLLChild)
-				{
-					pLLChild->bIsRed = true;
-					pLLChild->iBlackHeight = pLLChild->iBlackHeight - 1;
-				}
-				if (pLRChild)
-				{
-					pLRChild->bIsRed = true;
-					pLRChild->iBlackHeight = pLRChild->iBlackHeight - 1;
-				}
-			}
-			else
-			{
-				pLChild->bIsRed = true;
-			}
-			pLChild->iBlackHeight = pLChild->iBlackHeight - 1;
-		}
-		pNode->iBlackHeight = (pNode->bIsRed) ? 1 : 2;
+		ReduceBlackHeight(pRChild);
 	}
-	else if (!pLChild)
+	else if (pLChild && pRChild && ((pLChild->iBlackHeight) > (pRChild->iBlackHeight)))
 	{
-		if ((pRChild->iBlackHeight) != 1)
-		{
-			if (pRChild->bIsRed)
-			{
-				RedBlackNode* pRLChild = ToRedBlackNode(pRChild->LeftChild);
-				RedBlackNode* pRRChild = ToRedBlackNode(pRChild->RightChild);
-				if (pRLChild)
-				{
-					pRLChild->bIsRed = true;
-					pRLChild->iBlackHeight = pRLChild->iBlackHeight - 1;
-				}
-				if (pRRChild)
-				{
-					pRRChild->bIsRed = true;
-					pRRChild->iBlackHeight = pRRChild->iBlackHeight - 1;
-				}
-			}
-			else
-			{
-				pRChild->bIsRed = true;
-			}
-			pRChild->iBlackHeight = pRChild->iBlackHeight - 1;
-		}
-		pNode->iBlackHeight = (pNode->bIsRed) ? 1 : 2;
+		ReduceBlackHeight(pLChild);
 	}
-	else if ((pLChild->iBlackHeight) == (pRChild->iBlackHeight))
+	else if (pLChild && pRChild && ((pLChild->iBlackHeight) < (pRChild->iBlackHeight)))
 	{
-		int iChildHeight = pRChild->iBlackHeight;
-		pNode->iBlackHeight = (pNode->bIsRed) ? iChildHeight : (iChildHeight + 1);
+		ReduceBlackHeight(pRChild);
 	}
-	else if((pLChild->iBlackHeight) > (pRChild->iBlackHeight))
+}
+
+void RedBlackTree::ReduceBlackHeight(RedBlackNode* pNode)
+{
+	if (pNode->bIsRed)
 	{
-		if (pLChild->bIsRed)
-		{
-			RedBlackNode* pLLChild = ToRedBlackNode(pLChild->LeftChild);
-			RedBlackNode* pLRChild = ToRedBlackNode(pLChild->RightChild);
-			if (pLLChild)
-			{
-				pLLChild->bIsRed = true;
-				pLLChild->iBlackHeight = pLLChild->iBlackHeight - 1;
-			}
-			if (pLRChild)
-			{
-				pLRChild->bIsRed = true;
-				pLRChild->iBlackHeight = pLRChild->iBlackHeight - 1;
-			}
-		}
-		else
+		RedBlackNode* pLChild = ToRedBlackNode(pNode->LeftChild);
+		RedBlackNode* pRChild = ToRedBlackNode(pNode->RightChild);
+		if (pLChild)
 		{
 			pLChild->bIsRed = true;
+			(pLChild->iBlackHeight)--;
 		}
-		pLChild->iBlackHeight = pLChild->iBlackHeight - 1;
-		int iChildHeight = pRChild->iBlackHeight;
-		pNode->iBlackHeight = (pNode->bIsRed) ? iChildHeight : (iChildHeight + 1);
-	}
-	else if ((pLChild->iBlackHeight) < (pRChild->iBlackHeight))
-	{
-		if (pRChild->bIsRed)
-		{
-			RedBlackNode* pRLChild = ToRedBlackNode(pRChild->LeftChild);
-			RedBlackNode* pRRChild = ToRedBlackNode(pRChild->RightChild);
-			if (pRLChild)
-			{
-				pRLChild->bIsRed = true;
-				pRLChild->iBlackHeight = pRLChild->iBlackHeight - 1;
-			}
-			if (pRRChild)
-			{
-				pRRChild->bIsRed = true;
-				pRRChild->iBlackHeight = pRRChild->iBlackHeight - 1;
-			}
-		}
-		else
+		if (pRChild)
 		{
 			pRChild->bIsRed = true;
+			(pRChild->iBlackHeight)--;
 		}
-		pRChild->iBlackHeight = pRChild->iBlackHeight - 1;
-		int iChildHeight = pLChild->iBlackHeight;
-		pNode->iBlackHeight = (pNode->bIsRed) ? iChildHeight : (iChildHeight + 1);
 	}
-	
+	else
+	{
+		pNode->bIsRed = true;
+	}
+	(pNode->iBlackHeight)--;
 }
 
 void RedBlackTree::EnsureRedBlackRule(RedBlackNode* pNode, RedBlackNode* pParent)
@@ -239,39 +170,37 @@ void RedBlackTree::ApplyRotation(RedBlackNode* pNode, RedBlackNode* pParent, Bal
 {
 	switch (Strategy)
 	{
-	case BalanceStrategy::LeftRightRotation:
-	{
-		RedBlackNode* pLRChild = ToRedBlackNode(pNode->LeftChild->RightChild);
-		pNode->bIsRed = true;
-		pLRChild->bIsRed = false;
-		ApplyLeftRightRotation(pNode, pParent);
-		break;
+		case BalanceStrategy::LeftRightRotation:
+		{
+			FlipNodesColour(pNode, ToRedBlackNode(pNode->LeftChild->RightChild));
+			ApplyLeftRightRotation(pNode, pParent);
+			break;
+		}
+		case BalanceStrategy::RightLeftRotation:
+		{
+			FlipNodesColour(pNode, ToRedBlackNode(pNode->RightChild->LeftChild));
+			ApplyRightLeftRotation(pNode, pParent);
+			break;
+		}
+		case BalanceStrategy::LeftRotation:
+		{
+			FlipNodesColour(pNode, ToRedBlackNode(pNode->RightChild));
+			ApplyLeftRotation(pNode, pParent);
+			break;
+		}
+		case BalanceStrategy::RightRotation:
+		{
+			FlipNodesColour(pNode, ToRedBlackNode(pNode->LeftChild));
+			ApplyRightRotation(pNode, pParent);
+			break;
+		}
 	}
-	case BalanceStrategy::RightLeftRotation:
-	{
-		RedBlackNode* pRLChild = ToRedBlackNode(pNode->RightChild->LeftChild);
-		pNode->bIsRed = true;
-		pRLChild->bIsRed = false;
-		ApplyRightLeftRotation(pNode, pParent);
-		break;
-	}
-	case BalanceStrategy::LeftRotation:
-	{
-		RedBlackNode* pRChild = ToRedBlackNode(pNode->RightChild);
-		pNode->bIsRed = true;
-		pRChild->bIsRed = false;
-		ApplyLeftRotation(pNode, pParent);
-		break;
-	}
-	case BalanceStrategy::RightRotation:
-	{
-		RedBlackNode* pLChild = ToRedBlackNode(pNode->LeftChild);
-		pNode->bIsRed = true;
-		pLChild->bIsRed = false;
-		ApplyRightRotation(pNode, pParent);
-		break;
-	}
-	}
+}
+
+void RedBlackTree::FlipNodesColour(RedBlackNode* pBlackNode, RedBlackNode* pRedNode)
+{
+	pBlackNode->bIsRed = true;
+	pRedNode->bIsRed = false;
 }
 
 void RedBlackTree::ApplyLeftRightRotation(RedBlackNode* pNode, RedBlackNode* pParent)
