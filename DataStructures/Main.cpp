@@ -97,6 +97,20 @@ void test_heap()
 
 void test_red_black_tree()
 {
+	BinaryTree BTree;
+	BTree.Add(35);
+	BTree.Add(33);
+	BTree.Add(42);
+	BTree.Add(10);
+	BTree.Add(14);
+	BTree.Add(19);
+	BTree.Add(27);
+	BTree.Add(44);
+	BTree.Add(26);
+	BTree.Add(31);
+
+	AVLTree<int> AVL(&BTree);
+
 	RedBlackTree RBTree;
 	RBTree.Add(35);
 	RBTree.Add(33);
@@ -104,19 +118,31 @@ void test_red_black_tree()
 	RBTree.Add(10);
 	RBTree.Add(14);
 	RBTree.Add(19);
-	/*RBTree.Add(27);
+	RBTree.Add(27);
 	RBTree.Add(44);
 	RBTree.Add(26);
-	RBTree.Add(31);*/
+	RBTree.Add(31);
 
 	//RBTree.Delete(35);
 
-	
-	TreePrinter Printer(&RBTree);
-	Printer.Print();
+	std::cout << "AVL TREE" << std::endl;
+	std::cout << "------------------------------------------------" << std::endl;
+	TreePrinter UBTPrinter(&AVL);
+	UBTPrinter.Print();
+	std::cout << std::endl;
+	std::cout << "------------------------------------------------" << std::endl;
+	std::cout << "RED BLACK TREE" << std::endl;
+	std::cout << "------------------------------------------------" << std::endl;
+	TreePrinter BTPrinter(&RBTree);
+	BTPrinter.Print();
+	std::cout << std::endl;
+	std::cout << "------------------------------------------------" << std::endl;
+
+	/*TreePrinter Printer(&RBTree);
+	Printer.Print();*/
 }
 
 int main()
 {
-	test_AVL();
+	test_red_black_tree();
 }

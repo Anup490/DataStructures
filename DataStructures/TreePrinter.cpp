@@ -138,7 +138,7 @@ void TreePrinter::PrintLine(Line* pLine)
 	Node<int>* pNode = pLine->GetNode();
 	if (pNode)
 	{
-		cout << pNode->Value << GetColorIfRedBlack(pLine->GetNode());
+		cout << pNode->Value << GetColorIfRedBlack(pLine->GetNode()) << " " << GetHeightIfRedBlack(pLine->GetNode());
 	}
 	else
 	{
@@ -154,4 +154,14 @@ char TreePrinter::GetColorIfRedBlack(Node<int>* pNode)
 		return (pRBNode->bIsRed) ? 'R' : 'B';
 	}
 	return 'X';
+}
+
+int TreePrinter::GetHeightIfRedBlack(Node<int>* pNode)
+{
+	RedBlackNode* pRBNode = static_cast<RedBlackNode*>(pNode);
+	if (pRBNode)
+	{
+		return pRBNode->iBlackHeight;
+	}
+	return 0;
 }

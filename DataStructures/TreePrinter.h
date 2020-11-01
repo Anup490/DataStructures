@@ -33,6 +33,7 @@ class TreePrinter
 	void AddGaps(bool bChangeLine,int& iGaps);
 	void PrintLine(Line* pLine);
 	char GetColorIfRedBlack(Node<int>* pNode);
+	int GetHeightIfRedBlack(Node<int>* pNode);
 public:
 	TreePrinter(Tree<int>* pTree);
 	~TreePrinter();

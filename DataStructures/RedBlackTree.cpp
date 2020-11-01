@@ -14,6 +14,7 @@ void RedBlackTree::Add(int iValue)
 		pNode->bIsRed = true;
 		pNode->iBlackHeight = 1;
 		ApplyBinaryInsertion(pRoot, pNode);
+		UpdateBlackHeight(ToRedBlackNode(pRoot));
 		EnsureRedBlackRule(ToRedBlackNode(pRoot), nullptr);
 	}
 	else
@@ -29,6 +30,148 @@ void RedBlackTree::Add(int iValue)
 void RedBlackTree::Delete(int iValue) 
 {
 	ApplyBinaryDeletion(nullptr, pRoot, iValue);
+}
+
+void RedBlackTree::UpdateBlackHeight(RedBlackNode* pNode)
+{
+	if (pNode->LeftChild)
+	{
+		UpdateBlackHeight(ToRedBlackNode(pNode->LeftChild));
+	}
+	if (pNode->RightChild)
+	{
+		UpdateBlackHeight(ToRedBlackNode(pNode->RightChild));
+	}
+
+	RedBlackNode* pLChild = ToRedBlackNode(pNode->LeftChild);
+	RedBlackNode* pRChild = ToRedBlackNode(pNode->RightChild);
+
+	if (!pRChild && !pLChild)
+	{
+		pNode->iBlackHeight = (pNode->bIsRed) ? 1 : 2;
+	}
+	else if (!pRChild)
+	{
+		if ((pLChild->iBlackHeight) != 1)
+		{
+			if (pLChild->bIsRed)
+			{
+				RedBlackNode* pLLChild = ToRedBlackNode(pLChild->LeftChild);
+				RedBlackNode* pLRChild = ToRedBlackNode(pLChild->RightChild);
+				if (pLLChild)
+				{
+					pLLChild->bIsRed = true;
+					pLLChild->iBlackHeight = pLLChild->iBlackHeight - 1;
+				}
+				if (pLRChild)
+				{
+					pLRChild->bIsRed = true;
+					pLRChild->iBlackHeight = pLRChild->iBlackHeight - 1;
+				}
+			}
+			else
+			{
+				pLChild->bIsRed = true;
+			}
+			pLChild->iBlackHeight = pLChild->iBlackHeight - 1;
+			//UpdateBlackHeight(pLChild);
+		}
+		pNode->iBlackHeight = (pNode->bIsRed) ? 1 : 2;
+		/*else 
+		{
+			pNode->iBlackHeight = (pNode->bIsRed) ? 1 : 2;
+		}*/
+	}
+	else if (!pLChild)
+	{
+		if ((pRChild->iBlackHeight) != 1)
+		{
+			if (pRChild->bIsRed)
+			{
+				RedBlackNode* pRLChild = ToRedBlackNode(pRChild->LeftChild);
+				RedBlackNode* pRRChild = ToRedBlackNode(pRChild->RightChild);
+				if (pRLChild)
+				{
+					pRLChild->bIsRed = true;
+					pRLChild->iBlackHeight = pRLChild->iBlackHeight - 1;
+				}
+				if (pRRChild)
+				{
+					pRRChild->bIsRed = true;
+					pRRChild->iBlackHeight = pRRChild->iBlackHeight - 1;
+				}
+			}
+			else
+			{
+				pRChild->bIsRed = true;
+			}
+			pRChild->iBlackHeight = pRChild->iBlackHeight - 1;
+			//UpdateBlackHeight(pRChild);
+		}
+		/*else
+		{
+			pNode->iBlackHeight = (pNode->bIsRed) ? 1 : 2;
+		}*/
+		pNode->iBlackHeight = (pNode->bIsRed) ? 1 : 2;
+	}
+	else if ((pLChild->iBlackHeight) == (pRChild->iBlackHeight))
+	{
+		int iChildHeight = pRChild->iBlackHeight;
+		pNode->iBlackHeight = (pNode->bIsRed) ? iChildHeight : (iChildHeight + 1);
+	}
+	else if((pLChild->iBlackHeight) > (pRChild->iBlackHeight))
+	{
+		if (pLChild->bIsRed)
+		{
+			RedBlackNode* pLLChild = ToRedBlackNode(pLChild->LeftChild);
+			RedBlackNode* pLRChild = ToRedBlackNode(pLChild->RightChild);
+			if (pLLChild)
+			{
+				pLLChild->bIsRed = true;
+				pLLChild->iBlackHeight = pLLChild->iBlackHeight - 1;
+			}
+			if (pLRChild)
+			{
+				pLRChild->bIsRed = true;
+				pLRChild->iBlackHeight = pLRChild->iBlackHeight - 1;
+			}
+		}
+		else
+		{
+			pLChild->bIsRed = true;
+		}
+		pLChild->iBlackHeight = pLChild->iBlackHeight - 1;
+		//UpdateBlackHeight(pLChild);
+		int iChildHeight = pRChild->iBlackHeight;
+		pNode->iBlackHeight = (pNode->bIsRed) ? iChildHeight : (iChildHeight + 1);
+	}
+	else if ((pLChild->iBlackHeight) < (pRChild->iBlackHeight))
+	{
+		if (pRChild->bIsRed)
+		{
+			RedBlackNode* pRLChild = ToRedBlackNode(pRChild->LeftChild);
+			RedBlackNode* pRRChild = ToRedBlackNode(pRChild->RightChild);
+			if (pRLChild)
+			{
+				pRLChild->bIsRed = true;
+				pRLChild->iBlackHeight = pRLChild->iBlackHeight - 1;
+			}
+			if (pRRChild)
+			{
+				pRRChild->bIsRed = true;
+				pRRChild->iBlackHeight = pRRChild->iBlackHeight - 1;
+			}
+		}
+		else
+		{
+			pRChild->bIsRed = true;
+		}
+		pRChild->iBlackHeight = pRChild->iBlackHeight - 1;
+		//UpdateBlackHeight(pRChild);
+		int iChildHeight = pLChild->iBlackHeight;
+		pNode->iBlackHeight = (pNode->bIsRed) ? iChildHeight : (iChildHeight + 1);
+	}
+	
 }
 
 void RedBlackTree::EnsureRedBlackRule(RedBlackNode* pNode, RedBlackNode* pParent)
@@ -56,15 +199,15 @@ void RedBlackTree::FixRedBlackIssue(RedBlackNode* pNode, RedBlackNode* pParent)
 		else
 		{
 			ApplyRotation(pNode,pParent,Strategy);
-			if ((Strategy == BalanceStrategy::LeftRotation) || (Strategy == BalanceStrategy::LeftRightRotation))
-			{
-				CheckBlackHeight(ToRedBlackNode(pNode->LeftChild));
-			}
-			else if ((Strategy == BalanceStrategy::RightRotation) || (Strategy == BalanceStrategy::RightLeftRotation))
-			{
-				CheckBlackHeight(ToRedBlackNode(pNode->RightChild));
-			}
-			FixRedBlackIssue(pNode,pParent);
+			bool bAppliedHeightFix = false;
+			UpdateBlackHeight(ToRedBlackNode(pRoot));
+			EnsureRedBlackRule(ToRedBlackNode(pRoot), nullptr);
+			//CheckBlackHeight(ToRedBlackNode(pRoot), bAppliedHeightFix);
+			//if (bAppliedHeightFix)
+			//{
+			//	//UpdateBlackHeight(ToRedBlackNode(pRoot));
+			//	EnsureRedBlackRule(pNode, pParent);
+			//}
 		}
 	}
 }
@@ -83,11 +226,11 @@ BalanceStrategy RedBlackTree::GetBalanceStrategy(RedBlackNode* pNode)
 		{
 			return (IsRedNode(pRChild)) ? (BalanceStrategy::Recolour) : (BalanceStrategy::LeftRightRotation);
 		}
-		else if (IsRedNode(pRChild) && IsRedNode(pLChild->LeftChild))
+		else if (IsRedNode(pRChild) && IsRedNode(pRChild->LeftChild))
 		{
 			return (IsRedNode(pLChild)) ? (BalanceStrategy::Recolour) : (BalanceStrategy::RightLeftRotation);
 		}
-		else if (IsRedNode(pRChild) && IsRedNode(pLChild->RightChild))
+		else if (IsRedNode(pRChild) && IsRedNode(pRChild->RightChild))
 		{
 			return (IsRedNode(pLChild)) ? (BalanceStrategy::Recolour) : (BalanceStrategy::LeftRotation);
 		}
@@ -215,52 +358,127 @@ void RedBlackTree::AttachAsRightChild(RedBlackNode* pParent, RedBlackNode* pChil
 	}
 }
 
-void RedBlackTree::CheckBlackHeight(RedBlackNode* pNode)
+void RedBlackTree::CheckBlackHeight(RedBlackNode* pNode, bool& bHasAppliedFix)
 {
 	if (pNode)
 	{
 		if (pNode->LeftChild)
 		{
-			CheckBlackHeight(ToRedBlackNode(pNode->LeftChild));
+			CheckBlackHeight(ToRedBlackNode(pNode->LeftChild), bHasAppliedFix);
 		}
 		if (pNode->RightChild)
 		{
-			CheckBlackHeight(ToRedBlackNode(pNode->RightChild));
+			CheckBlackHeight(ToRedBlackNode(pNode->RightChild), bHasAppliedFix);
 		}
-		SetBlackHeight(pNode);
+		SetBlackHeight(pNode, bHasAppliedFix);
 	}
 }
 
-void RedBlackTree::SetBlackHeight(RedBlackNode* pNode)
+void RedBlackTree::SetBlackHeight(RedBlackNode* pNode, bool& bHasAppliedFix)
 {
-	if ((!(pNode->LeftChild)) && (!(pNode->RightChild)))
+	/*if ((!(pNode->LeftChild)) && (!(pNode->RightChild)))
 	{
 		pNode->iBlackHeight = (pNode->bIsRed) ? 1 : 2;
 	}
-	else if ((ToRedBlackNode(pNode->LeftChild)->iBlackHeight) == (ToRedBlackNode(pNode->RightChild)->iBlackHeight))
-	{
-		RedBlackNode* pLChild = ToRedBlackNode(pNode->LeftChild);
-		int iChildHeight = pLChild->iBlackHeight;
-		pNode->iBlackHeight = (pNode->bIsRed) ? iChildHeight : ++iChildHeight;
-	}
-	else
+	else */
+	if ((pNode->LeftChild) && (pNode->RightChild))
 	{
 		RedBlackNode* pLChild = ToRedBlackNode(pNode->LeftChild);
 		RedBlackNode* pRChild = ToRedBlackNode(pNode->RightChild);
-		if ((pLChild->iBlackHeight) != (pRChild->iBlackHeight))
+		if ((pLChild->iBlackHeight) > (pRChild->iBlackHeight))
 		{
-			FixBlackHeight(((pLChild->iBlackHeight) > (pRChild->iBlackHeight)) ? pLChild : pRChild);
+			bHasAppliedFix = true;
+			FixBlackHeight(pLChild, pRChild->iBlackHeight);
+		}
+		else if ((pRChild->iBlackHeight) > (pLChild->iBlackHeight))
+		{
+			bHasAppliedFix = true;
+			FixBlackHeight(pRChild, pLChild->iBlackHeight);
+		}
+		/*if ((pLChild->iBlackHeight) == (pRChild->iBlackHeight))
+		{
+			int iChildHeight = pLChild->iBlackHeight;
+			pNode->iBlackHeight = (pNode->bIsRed) ? iChildHeight : (iChildHeight + 1);
+		}
+		else
+		{
+			if ((pLChild->iBlackHeight) > (pRChild->iBlackHeight))
+			{
+				bHasAppliedFix = true;
+				FixBlackHeight(pLChild, pRChild->iBlackHeight);
+			}
+			else if ((pRChild->iBlackHeight) > (pLChild->iBlackHeight))
+			{
+				bHasAppliedFix = true;
+				FixBlackHeight(pRChild, pLChild->iBlackHeight);
+			}
+		}*/
+	}
+	else if (pNode->LeftChild)
+	{
+		RedBlackNode* pLChild = ToRedBlackNode(pNode->LeftChild);
+		if ((pLChild->iBlackHeight) > 1)
+		{
+			bHasAppliedFix = true;
+			FixBlackHeight(pLChild, 1);
+		}
+	}
+	else if (pNode->RightChild)
+	{
+		RedBlackNode* pRChild = ToRedBlackNode(pNode->RightChild);
+		if ((pRChild->iBlackHeight) > 1)
+		{
+			bHasAppliedFix = true;
+			FixBlackHeight(pRChild, 1);
 		}
 	}
 }
 
-void RedBlackTree::FixBlackHeight(RedBlackNode* pNode)
+void RedBlackTree::FixBlackHeight(RedBlackNode* pNode, const int iResultHeight)
 {
+	/*int iHeightToReduce = iResultHeight;
+	if (pNode->LeftChild)
+	{
+		FixBlackHeight(ToRedBlackNode(pNode->LeftChild), (iHeightToReduce == 1) ? iHeightToReduce : --iHeightToReduce);
+	}
+	if (pNode->RightChild)
+	{
+		FixBlackHeight(ToRedBlackNode(pNode->RightChild), (iHeightToReduce == 1) ? iHeightToReduce : --iHeightToReduce);
+	}
+	if ((pNode->iBlackHeight) > iResultHeight)
+	{
+		if (!(pNode->bIsRed))
+		{
+			pNode->bIsRed = true;
+		}
+		pNode->iBlackHeight = 1;
+		if (pNode->LeftChild)
+		{
+			int iChildHeight = ToRedBlackNode(pNode->LeftChild)->iBlackHeight;
+			pNode->iBlackHeight = (pNode->bIsRed)?iChildHeight:(iChildHeight + 1);
+		}
+		else if (pNode->RightChild)
+		{
+			int iChildHeight = ToRedBlackNode(pNode->RightChild)->iBlackHeight;
+			pNode->iBlackHeight = (pNode->bIsRed) ? iChildHeight : (iChildHeight + 1);
+		}
+	}*/
+
 	if (!(pNode->bIsRed))
 	{
 		pNode->bIsRed = true;
-		(pNode->iBlackHeight)--;
 	}
+	/*pNode->iBlackHeight = 1;
+	if (pNode->LeftChild)
+	{
+		int iChildHeight = ToRedBlackNode(pNode->LeftChild)->iBlackHeight;
+		pNode->iBlackHeight = (pNode->bIsRed)?iChildHeight:(iChildHeight + 1);
+	}
+	else if (pNode->RightChild)
+	{
+		int iChildHeight = ToRedBlackNode(pNode->RightChild)->iBlackHeight;
+		pNode->iBlackHeight = (pNode->bIsRed) ? iChildHeight : (iChildHeight + 1);
+	}*/
 }
 
 RedBlackNode* RedBlackTree::ToRedBlackNode(Node<int>* pNode)
