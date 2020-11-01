@@ -118,7 +118,6 @@ void RedBlackTree::FixRedBlackIssue(RedBlackNode* pNode, RedBlackNode* pParent)
 		else
 		{
 			ApplyRotation(pNode,pParent,Strategy);
-			bool bAppliedHeightFix = false;
 			UpdateBlackHeight(ToRedBlackNode(pRoot));
 			EnsureRedBlackRule(ToRedBlackNode(pRoot), nullptr);
 		}
@@ -163,7 +162,15 @@ void RedBlackTree::ApplyRecolouring(RedBlackNode* pNode)
 	RedBlackNode* pRChild = ToRedBlackNode(pNode->RightChild);
 	pNode->bIsRed = !(pNode->bIsRed);
 	pLChild->bIsRed = !(pLChild->bIsRed);
+	if (!(pLChild->bIsRed))
+	{
+		(pLChild->iBlackHeight)++;
+	}
 	pRChild->bIsRed = !(pRChild->bIsRed);
+	if (!(pRChild->bIsRed))
+	{
+		(pRChild->iBlackHeight)++;
+	}
 }
 
 void RedBlackTree::ApplyRotation(RedBlackNode* pNode, RedBlackNode* pParent, BalanceStrategy Strategy)
