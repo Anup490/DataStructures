@@ -28,9 +28,6 @@ class RedBlackTree : public BinaryTree
 	void AttachChild(RedBlackNode* pParent, RedBlackNode* pChild, ChildType Type);
 	void AttachAsLeftChild(RedBlackNode* pParent, RedBlackNode* pChild);
 	void AttachAsRightChild(RedBlackNode* pParent, RedBlackNode* pChild);
-	void CheckBlackHeight(RedBlackNode* pNode, bool& bHasAppliedFix);
-	void SetBlackHeight(RedBlackNode* pNode, bool& bHasAppliedFix);
-	void FixBlackHeight(RedBlackNode* pNode, const int iResultHeight);
 	RedBlackNode* ToRedBlackNode(Node<int>* pNode);
 public:
 	RedBlackTree();
