@@ -11,7 +11,7 @@ void RedBlackTree::Add(int iValue)
 	{
 		RedBlackNode* pNode = CreateNewNode(iValue);
 		ApplyBinaryInsertion(pRoot, pNode);
-		EnsureRedBlackRuleInTree(ToRedBlackNode(pRoot), nullptr);
+		EnsureRedBlackRuleInTreeAfterInsertion(ToRedBlackNode(pRoot), nullptr);
 	}
 	else
 	{
@@ -32,7 +32,7 @@ RedBlackNode* RedBlackTree::CreateNewNode(int iValue)
 void RedBlackTree::Delete(int iValue) 
 {
 	ApplyBinaryDeletion(nullptr, pRoot, iValue);
-	EnsureRedBlackRuleForDeletion(ToRedBlackNode(pRoot), nullptr);
+	EnsureRedBlackRuleInTreeAfterDeletion(ToRedBlackNode(pRoot), nullptr);
 	EnsureRedBlackRuleInRoot(ToRedBlackNode(pRoot));
 }
 
@@ -98,22 +98,22 @@ void RedBlackTree::ConvertToRedNode(RedBlackNode* pBlackNode)
 	}
 }
 
-void RedBlackTree::EnsureRedBlackRuleInTree(RedBlackNode* pNode, RedBlackNode* pParent)
+void RedBlackTree::EnsureRedBlackRuleInTreeAfterInsertion(RedBlackNode* pNode, RedBlackNode* pParent)
 {
 	if (pNode->LeftChild)
 	{
-		EnsureRedBlackRuleInTree(ToRedBlackNode(pNode->LeftChild), pNode);
+		EnsureRedBlackRuleInTreeAfterInsertion(ToRedBlackNode(pNode->LeftChild), pNode);
 	}
 	if (pNode->RightChild)
 	{
-		EnsureRedBlackRuleInTree(ToRedBlackNode(pNode->RightChild), pNode);
+		EnsureRedBlackRuleInTreeAfterInsertion(ToRedBlackNode(pNode->RightChild), pNode);
 	}
-	EnsureRedBlackRule(pNode,pParent);
+	EnsureRedBlackRuleAfterInsertion(pNode,pParent);
 }
 
-void RedBlackTree::EnsureRedBlackRule(RedBlackNode* pNode, RedBlackNode* pParent)
+void RedBlackTree::EnsureRedBlackRuleAfterInsertion(RedBlackNode* pNode, RedBlackNode* pParent)
 {
-	BalanceStrategy Strategy = GetBalanceStrategy(pNode);
+	BalanceStrategy Strategy = GetBalanceStrategyForInsertion(pNode);
 	if (Strategy == BalanceStrategy::Recolour)
 	{
 		ApplyRecolouring(pNode);
@@ -122,11 +122,11 @@ void RedBlackTree::EnsureRedBlackRule(RedBlackNode* pNode, RedBlackNode* pParent
 	{
 		RedBlackNode* pNewNode = GetBalancedNode(pNode, pParent, Strategy);
 		UpdateBlackHeight(pNewNode);
-		EnsureRedBlackRuleInTree(pNewNode, pParent);
+		EnsureRedBlackRuleInTreeAfterInsertion(pNewNode, pParent);
 	}
 }
 
-BalanceStrategy RedBlackTree::GetBalanceStrategy(RedBlackNode* pNode)
+BalanceStrategy RedBlackTree::GetBalanceStrategyForInsertion(RedBlackNode* pNode)
 {
 	if (!(pNode->bIsRed))
 	{
@@ -296,32 +296,32 @@ void RedBlackTree::OnDelete(Node<int>* pReplacedNode)
 	}
 }
 
-void RedBlackTree::EnsureRedBlackRuleForDeletion(RedBlackNode* pNode, RedBlackNode* pParent)
+void RedBlackTree::EnsureRedBlackRuleInTreeAfterDeletion(RedBlackNode* pNode, RedBlackNode* pParent)
 {
 	if (pNode->LeftChild)
 	{
-		EnsureRedBlackRuleForDeletion(ToRedBlackNode(pNode->LeftChild), pNode);
+		EnsureRedBlackRuleInTreeAfterDeletion(ToRedBlackNode(pNode->LeftChild), pNode);
 	}
 	if (pNode->RightChild)
 	{
-		EnsureRedBlackRuleForDeletion(ToRedBlackNode(pNode->RightChild), pNode);
+		EnsureRedBlackRuleInTreeAfterDeletion(ToRedBlackNode(pNode->RightChild), pNode);
 	}
-	FixRedBlackIssueForDeletion(pNode, pParent);
+	EnsureRedBlackRuleAfterDeletion(pNode, pParent);
 }
 
-void RedBlackTree::FixRedBlackIssueForDeletion(RedBlackNode* pNode, RedBlackNode* pParent)
+void RedBlackTree::EnsureRedBlackRuleAfterDeletion(RedBlackNode* pNode, RedBlackNode* pParent)
 {
-	RedBlackNode* pDoubleBlackSibling = GetDoubleBlackSibling(pNode);
+	RedBlackNode* pDoubleBlackSibling = GetSiblingOfDoubleBlack(pNode);
 	if (pDoubleBlackSibling)
 	{
 		BalanceStrategy Strategy = GetBalanceStrategyForDeletion(pNode, pDoubleBlackSibling);
 		ApplyBalanceStrategyForDeletion(pNode, pParent, Strategy);
 	}
 	UpdateBlackHeight(ToRedBlackNode(pNode));
-	EnsureRedBlackRuleInTree(ToRedBlackNode(pNode), pParent);
+	EnsureRedBlackRuleInTreeAfterInsertion(ToRedBlackNode(pNode), pParent);
 }
 
-RedBlackNode* RedBlackTree::GetDoubleBlackSibling(RedBlackNode* pNode)
+RedBlackNode* RedBlackTree::GetSiblingOfDoubleBlack(RedBlackNode* pNode)
 {
 	RedBlackNode* pLChild = ToRedBlackNode(pNode->LeftChild);
 	RedBlackNode* pRChild = ToRedBlackNode(pNode->RightChild);

@@ -19,9 +19,9 @@ class RedBlackTree : public BinaryTree
 	void BalanceChildrenBlackHeight(RedBlackNode* pLChild, RedBlackNode* pRChild);
 	void ReduceBlackHeight(RedBlackNode* pNode);
 	void ConvertToRedNode(RedBlackNode* pBlackNode);
-	void EnsureRedBlackRuleInTree(RedBlackNode* pNode, RedBlackNode* pParent);
-	void EnsureRedBlackRule(RedBlackNode* pNode, RedBlackNode* pParent);
-	BalanceStrategy GetBalanceStrategy(RedBlackNode* pNode);
+	void EnsureRedBlackRuleInTreeAfterInsertion(RedBlackNode* pNode, RedBlackNode* pParent);
+	void EnsureRedBlackRuleAfterInsertion(RedBlackNode* pNode, RedBlackNode* pParent);
+	BalanceStrategy GetBalanceStrategyForInsertion(RedBlackNode* pNode);
 	bool IsRedNode(Node<int>* pNode);
 	void ApplyRecolouring(RedBlackNode* pNode);
 	void RaiseBlackHeightIfBlack(RedBlackNode* pNode);
@@ -35,15 +35,12 @@ class RedBlackTree : public BinaryTree
 	void AttachAsLeftChild(RedBlackNode* pParent, RedBlackNode* pChild);
 	void AttachAsRightChild(RedBlackNode* pParent, RedBlackNode* pChild);
 	void EnsureRedBlackRuleInRoot(RedBlackNode* pRoot);
-
-	//DELETION
 	void OnDelete(Node<int>* pReplacedNode) override;
-	void EnsureRedBlackRuleForDeletion(RedBlackNode* pNode, RedBlackNode* pParent);
-	void FixRedBlackIssueForDeletion(RedBlackNode* pNode, RedBlackNode* pParent);
-	RedBlackNode* GetDoubleBlackSibling(RedBlackNode* pNode);
+	void EnsureRedBlackRuleInTreeAfterDeletion(RedBlackNode* pNode, RedBlackNode* pParent);
+	void EnsureRedBlackRuleAfterDeletion(RedBlackNode* pNode, RedBlackNode* pParent);
+	RedBlackNode* GetSiblingOfDoubleBlack(RedBlackNode* pNode);
 	BalanceStrategy GetBalanceStrategyForDeletion(RedBlackNode* pParent, RedBlackNode* pChild);
 	void ApplyBalanceStrategyForDeletion(RedBlackNode* pNode, RedBlackNode* pParent, BalanceStrategy Strategy);
-	//
 	RedBlackNode* ToRedBlackNode(Node<int>* pNode);
 public:
 	RedBlackTree();
