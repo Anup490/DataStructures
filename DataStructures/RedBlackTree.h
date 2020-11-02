@@ -35,6 +35,15 @@ class RedBlackTree : public BinaryTree
 	void AttachAsLeftChild(RedBlackNode* pParent, RedBlackNode* pChild);
 	void AttachAsRightChild(RedBlackNode* pParent, RedBlackNode* pChild);
 	void EnsureRedBlackRuleInRoot(RedBlackNode* pRoot);
+
+	//DELETION
+	void OnDelete(Node<int>* pReplacedNode) override;
+	void EnsureRedBlackRuleForDeletion(RedBlackNode* pNode, RedBlackNode* pParent);
+	void FixRedBlackIssueForDeletion(RedBlackNode* pNode, RedBlackNode* pParent);
+	RedBlackNode* GetDoubleBlackSibling(RedBlackNode* pNode);
+	BalanceStrategy GetBalanceStrategyForDeletion(RedBlackNode* pParent, RedBlackNode* pChild);
+	void ApplyBalanceStrategyForDeletion(RedBlackNode* pNode, RedBlackNode* pParent, BalanceStrategy Strategy);
+	//
 	RedBlackNode* ToRedBlackNode(Node<int>* pNode);
 public:
 	RedBlackTree();

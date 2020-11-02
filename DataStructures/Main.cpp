@@ -123,7 +123,7 @@ void test_red_black_tree()
 	RBTree.Add(26);
 	RBTree.Add(31);
 
-	//RBTree.Delete(35);
+	RBTree.Delete(27);
 
 	/*std::cout << "AVL TREE" << std::endl;
 	std::cout << "------------------------------------------------" << std::endl;

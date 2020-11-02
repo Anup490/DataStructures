@@ -32,6 +32,8 @@ RedBlackNode* RedBlackTree::CreateNewNode(int iValue)
 void RedBlackTree::Delete(int iValue) 
 {
 	ApplyBinaryDeletion(nullptr, pRoot, iValue);
+	EnsureRedBlackRuleForDeletion(ToRedBlackNode(pRoot), nullptr);
+	EnsureRedBlackRuleInRoot(ToRedBlackNode(pRoot));
 }
 
 void RedBlackTree::UpdateBlackHeight(RedBlackNode* pNode)
@@ -282,6 +284,162 @@ void RedBlackTree::EnsureRedBlackRuleInRoot(RedBlackNode* pRoot)
 	pRoot->bIsRed = false;
 	int iChildHeight = (pRoot->RightChild) ? ToRedBlackNode(pRoot->RightChild)->iBlackHeight : 1;
 	pRoot->iBlackHeight = ++iChildHeight;
+}
+
+void RedBlackTree::OnDelete(Node<int>* pReplacedNode)
+{
+	RedBlackNode* pNode = ToRedBlackNode(pReplacedNode);
+	if (pNode->bIsRed)
+	{
+		pNode->bIsRed = false;
+		(pNode->iBlackHeight)++;
+	}
+}
+
+void RedBlackTree::EnsureRedBlackRuleForDeletion(RedBlackNode* pNode, RedBlackNode* pParent)
+{
+	if (pNode->LeftChild)
+	{
+		EnsureRedBlackRuleForDeletion(ToRedBlackNode(pNode->LeftChild), pNode);
+	}
+	if (pNode->RightChild)
+	{
+		EnsureRedBlackRuleForDeletion(ToRedBlackNode(pNode->RightChild), pNode);
+	}
+	FixRedBlackIssueForDeletion(pNode, pParent);
+}
+
+void RedBlackTree::FixRedBlackIssueForDeletion(RedBlackNode* pNode, RedBlackNode* pParent)
+{
+	RedBlackNode* pDoubleBlackSibling = GetDoubleBlackSibling(pNode);
+	if (pDoubleBlackSibling)
+	{
+		BalanceStrategy Strategy = GetBalanceStrategyForDeletion(pNode, pDoubleBlackSibling);
+		ApplyBalanceStrategyForDeletion(pNode, pParent, Strategy);
+	}
+	UpdateBlackHeight(ToRedBlackNode(pNode));
+	EnsureRedBlackRuleInTree(ToRedBlackNode(pNode), pParent);
+}
+
+RedBlackNode* RedBlackTree::GetDoubleBlackSibling(RedBlackNode* pNode)
+{
+	RedBlackNode* pLChild = ToRedBlackNode(pNode->LeftChild);
+	RedBlackNode* pRChild = ToRedBlackNode(pNode->RightChild);
+	if (!pLChild)
+	{
+		if ((pNode->bIsRed) && ((pNode->iBlackHeight) > 1))
+		{
+			return pRChild;
+		}
+		else if (!(pNode->bIsRed) && ((pNode->iBlackHeight) > 2))
+		{
+			return pRChild;
+		}
+	}
+	else if (!pRChild)
+	{
+		if ((pNode->bIsRed) && ((pNode->iBlackHeight) > 1))
+		{
+			return pLChild;
+		}
+		else if (!(pNode->bIsRed) && ((pNode->iBlackHeight) > 2))
+		{
+			return pLChild;
+		}
+	}
+	else if ((pNode->bIsRed) && ((pNode->iBlackHeight) > ((pLChild->iBlackHeight) + 1)))
+	{
+		return pRChild;
+	}
+	else if (!(pNode->bIsRed) && ((pNode->iBlackHeight) > ((pLChild->iBlackHeight) + 2)))
+	{
+		return pRChild;
+	}
+	else if ((pNode->bIsRed) && ((pNode->iBlackHeight) > ((pRChild->iBlackHeight) + 1)))
+	{
+		return pLChild;
+	}
+	else if (!(pNode->bIsRed) && ((pNode->iBlackHeight) > ((pRChild->iBlackHeight) + 2)))
+	{
+		return pLChild;
+	}
+	return nullptr;
+}
+
+BalanceStrategy RedBlackTree::GetBalanceStrategyForDeletion(RedBlackNode* pParent, RedBlackNode* pChild)
+{
+	if (pChild->bIsRed)
+	{
+		if ((pParent->LeftChild) == pChild)
+		{
+			return BalanceStrategy::LeftRotation;
+		}
+		else
+		{
+			return BalanceStrategy::RightRotation;
+		}
+	}
+	else if ((!(pChild->LeftChild) || !(ToRedBlackNode(pChild->LeftChild)->bIsRed)) 
+		&& ((!(pChild->RightChild) || !(ToRedBlackNode(pChild->RightChild)->bIsRed))))
+	{
+		if ((pParent->LeftChild) == pChild)
+		{
+			return BalanceStrategy::LeftRecolour;
+		}
+		else
+		{
+			return BalanceStrategy::RightRecolour;
+		}
+	}
+	else if ((pParent->LeftChild) == pChild)
+	{
+		if (ToRedBlackNode(pChild->LeftChild)->bIsRed)
+		{
+			return BalanceStrategy::RightRotation;
+		}
+		else
+		{
+			return BalanceStrategy::LeftRightRotation;
+		}
+	}
+	else if ((pParent->RightChild) == pChild)
+	{
+		if (ToRedBlackNode(pChild->RightChild)->bIsRed)
+		{
+			return BalanceStrategy::LeftRotation;
+		}
+		else
+		{
+			return BalanceStrategy::RightLeftRotation;
+		}
+	}
+	return BalanceStrategy::None;
+}
+
+void RedBlackTree::ApplyBalanceStrategyForDeletion(RedBlackNode* pNode, RedBlackNode* pParent, BalanceStrategy Strategy)
+{
+	if (Strategy != BalanceStrategy::None)
+	{
+		(pNode->iBlackHeight)--;
+		if (Strategy == BalanceStrategy::LeftRecolour)
+		{
+			pNode->bIsRed = false;
+			RedBlackNode* pLChild = ToRedBlackNode(pNode->LeftChild);
+			pLChild->bIsRed = true;
+			(pLChild->iBlackHeight)--;
+		}
+		else if (Strategy == BalanceStrategy::RightRecolour)
+		{
+			pNode->bIsRed = false;
+			RedBlackNode* pRChild = ToRedBlackNode(pNode->RightChild);
+			pRChild->bIsRed = true;
+			(pRChild->iBlackHeight)--;
+		}
+		else
+		{
+			pNode = GetBalancedNode(pNode, pParent, Strategy);
+		}
+	}
 }
 
 RedBlackNode* RedBlackTree::ToRedBlackNode(Node<int>* pNode)

@@ -65,7 +65,9 @@ void BinaryTree::ApplyBinaryDeletion(Node<int>* pParent, Node<int>* pNode, int i
 {
 	if ((pNode->Value) == iValue)
 	{
-		ReplaceNode(pNode, GetSuccessor(pNode), pParent);
+		Node<int>* pSuccessor = GetSuccessor(pNode);
+		ReplaceNode(pNode, pSuccessor, pParent);
+		OnDelete(pSuccessor);
 		delete pNode;
 	}
 	else if ((iValue < (pNode->Value)) && (pNode->LeftChild))
@@ -115,7 +117,7 @@ Node<int>* BinaryTree::GetSuccessor(Node<int>* pNode)
 	Node<int>* pSuccessorNode = nullptr;
 	if (pNode->RightChild)
 	{
-		pSuccessorNode = GetInorderSuccessor(pNode->RightChild);
+		pSuccessorNode = GetInorderSuccessor(pNode->RightChild, pNode);
 		pSuccessorNode->LeftChild = pNode->LeftChild;
 		AttachToRightSubTree(pNode->RightChild, pSuccessorNode, ChildType::Right);
 	}
@@ -126,13 +128,14 @@ Node<int>* BinaryTree::GetSuccessor(Node<int>* pNode)
 	return pSuccessorNode;
 }
 
-Node<int>* BinaryTree::GetInorderSuccessor(Node<int>* pNode)
+Node<int>* BinaryTree::GetInorderSuccessor(Node<int>* pNode, Node<int>* pParent)
 {
 	if (!(pNode->LeftChild))
 	{
+		pParent->LeftChild = nullptr;
 		return pNode;
 	}
-	return GetInorderSuccessor(pNode->LeftChild);
+	return GetInorderSuccessor(pNode->LeftChild, pNode);
 }
 
 void BinaryTree::AttachToRightSubTree(Node<int>* pNode, Node<int>* pParent, ChildType Type)
