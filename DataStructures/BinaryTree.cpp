@@ -132,7 +132,9 @@ Node<int>* BinaryTree::GetInorderSuccessor(Node<int>* pNode, Node<int>* pParent)
 {
 	if (!(pNode->LeftChild))
 	{
-		pParent->LeftChild = nullptr;
+		if ((pParent->LeftChild) == pNode) {
+			pParent->LeftChild = nullptr;
+		}
 		return pNode;
 	}
 	return GetInorderSuccessor(pNode->LeftChild, pNode);

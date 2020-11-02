@@ -97,7 +97,7 @@ void test_heap()
 
 void test_red_black_tree()
 {
-	/*BinaryTree BTree;
+	BinaryTree BTree;
 	BTree.Add(35);
 	BTree.Add(33);
 	BTree.Add(42);
@@ -109,7 +109,7 @@ void test_red_black_tree()
 	BTree.Add(26);
 	BTree.Add(31);
 
-	AVLTree<int> AVL(&BTree);*/
+	AVLTree<int> AVL(&BTree);
 
 	RedBlackTree RBTree;
 	RBTree.Add(35);
@@ -125,12 +125,12 @@ void test_red_black_tree()
 
 	RBTree.Delete(27);
 
-	/*std::cout << "AVL TREE" << std::endl;
+	std::cout << "AVL TREE" << std::endl;
 	std::cout << "------------------------------------------------" << std::endl;
 	TreePrinter AVLTPrinter(&AVL);
 	AVLTPrinter.Print();
 	std::cout << std::endl;
-	std::cout << "------------------------------------------------" << std::endl;*/
+	std::cout << "------------------------------------------------" << std::endl;
 	std::cout << "RED BLACK TREE" << std::endl;
 	std::cout << "------------------------------------------------" << std::endl;
 	TreePrinter RBTPrinter(&RBTree);
