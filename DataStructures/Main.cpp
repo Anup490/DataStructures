@@ -121,7 +121,7 @@ void test_red_black_tree()
 	RBTree.Add(27);
 	RBTree.Add(44);
 	RBTree.Add(26);
-	RBTree.Add(31);
+	//RBTree.Add(31);
 
 	//RBTree.Delete(35);
 

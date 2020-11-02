@@ -14,7 +14,6 @@ void RedBlackTree::Add(int iValue)
 		pNode->bIsRed = true;
 		pNode->iBlackHeight = 1;
 		ApplyBinaryInsertion(pRoot, pNode);
-		UpdateBlackHeight(ToRedBlackNode(pRoot));
 		EnsureRedBlackRule(ToRedBlackNode(pRoot), nullptr);
 	}
 	else
@@ -118,9 +117,35 @@ void RedBlackTree::FixRedBlackIssue(RedBlackNode* pNode, RedBlackNode* pParent)
 		else
 		{
 			ApplyRotation(pNode,pParent,Strategy);
-			UpdateBlackHeight(ToRedBlackNode(pRoot));
-			EnsureRedBlackRule(ToRedBlackNode(pRoot), nullptr);
+			if ((Strategy == BalanceStrategy::RightRotation) || (Strategy == BalanceStrategy::LeftRightRotation))
+			{
+				if (pParent)
+				{
+					UpdateBlackHeight(ToRedBlackNode(pParent));
+					EnsureRedBlackRule(ToRedBlackNode(pParent->LeftChild), pParent);
+				}
+				else
+				{
+					UpdateBlackHeight(ToRedBlackNode(pRoot));
+					EnsureRedBlackRule(ToRedBlackNode(pRoot), nullptr);
+				}
+				
+			}
+			else if ((Strategy == BalanceStrategy::LeftRotation) || (Strategy == BalanceStrategy::RightLeftRotation))
+			{
+				if (pParent)
+				{
+					UpdateBlackHeight(ToRedBlackNode(pParent));
+					EnsureRedBlackRule(ToRedBlackNode(pParent->RightChild), pParent);
+				}
+				else
+				{
+					UpdateBlackHeight(ToRedBlackNode(pRoot));
+					EnsureRedBlackRule(ToRedBlackNode(pRoot), nullptr);
+				}
+			}
 		}
+		
 	}
 }
 
@@ -207,7 +232,9 @@ void RedBlackTree::ApplyRotation(RedBlackNode* pNode, RedBlackNode* pParent, Bal
 void RedBlackTree::FlipNodesColour(RedBlackNode* pBlackNode, RedBlackNode* pRedNode)
 {
 	pBlackNode->bIsRed = true;
+	(pBlackNode->iBlackHeight)--;
 	pRedNode->bIsRed = false;
+	(pRedNode->iBlackHeight)++;
 }
 
 void RedBlackTree::ApplyLeftRightRotation(RedBlackNode* pNode, RedBlackNode* pParent)
