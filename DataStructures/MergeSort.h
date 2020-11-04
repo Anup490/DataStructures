@@ -16,10 +16,10 @@ class MergeSort
 	vector<int>* pSVector;
 	void Sort(vector<int>* pUVector);
 	bool DoesNotHaveItem(int iItem);
+	void Swap(int& iA, int&iB);
 public:
 	MergeSort(vector<int>* pUVector);
 	vector<int>* GetSortedItems();
-	~MergeSort();
 };
 
 
