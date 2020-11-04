@@ -1,13 +1,12 @@
 #include "MergeSort.h"
 #include <vector>
 
-
 MergeSort::MergeSort(vector<int>* pUVector)
 {
-	pSVector = pUVector;//new vector<int>;
+	pSVector = pUVector;
 	if (pSVector)
 	{
-		Sort(pSVector);
+		Sort();
 	}
 }
 
@@ -16,75 +15,70 @@ vector<int>* MergeSort::GetSortedItems()
 	return pSVector;
 }
 
-void MergeSort::Sort(vector<int>* pUVector)
+void MergeSort::Sort()
 {
 	int iItr = 2;
-	while ((iItr/2) <= (pUVector->size()))
+	while ((iItr/2) <= (pSVector->size()))
 	{
-		for (int i=0; i<(pUVector->size()); i+=iItr)
+		int iPiece = iItr / 2;
+		for (int i=0; i<(pSVector->size()); i+=iItr)
 		{
-			int iPiece = iItr / 2;
-			for (int j=i; j<(i + iPiece); j++)
+			vector<int> vBuffer;
+			for (int j = i; j < (i + iPiece); j++)
 			{
-				for (int k = (i + iPiece); k<(i+iItr); k++)
+				for (int k = (i + iPiece); k < (i + iItr); k++)
 				{
-					if ((k < (pUVector->size())) && (j < (pUVector->size())))
+					if ((k < (pSVector->size())) && (j < (pSVector->size())))
 					{
-						if ((pUVector->at(j)) > (pUVector->at(k)))
+						if ((pSVector->at(j)) < (pSVector->at(k)))
 						{
-							Swap(pUVector->at(j), pUVector->at(k));
+							vBuffer.push_back(pSVector->at(j));
+							break;
 						}
-					}
-				}	
-			}
-			for (int l = (i + iPiece); l < (i + iItr - 1); l++)
-			{
-				if ((l + 1) < (pUVector->size()))
+						else if(DoesNotHaveItem(&vBuffer, pSVector->at(k)))
+						{
+							vBuffer.push_back(pSVector->at(k));
+						}
+					}	
+				}
+				if ((j < (pSVector->size())) && DoesNotHaveItem(&vBuffer, pSVector->at(j)))
 				{
-					if ((pUVector->at(l)) > (pUVector->at(l + 1)))
+					vBuffer.push_back(pSVector->at(j));
+				}
+			}
+			for (int l = (i + iPiece); l < (i + iItr); l++)
+			{
+				if (l < (pSVector->size()))
+				{
+					if (DoesNotHaveItem(&vBuffer, pSVector->at(l)))
 					{
-						Swap(pUVector->at(l), pUVector->at(l + 1));
+						vBuffer.push_back(pSVector->at(l));
 					}
+				}
+			}
+			for (int m = 0; m < (vBuffer.size()); m++)
+			{
+				if ((i+m) < (pSVector->size()))
+				{
+					pSVector->at(i + m) = vBuffer.at(m);
 				}
 			}
 		}
 		iItr *= 2;
 	}
+}
 
-	if ((pUVector->size() % 4) != 0)
+bool MergeSort::DoesNotHaveItem(vector<int>* pVector, int iItem)
+{
+	if (pVector)
 	{
-		int iStart = iItr / 4;
-		int iEnd = iItr / 2;
-		for (int l = iStart; l < iEnd; l++)
+		for (int iValue : *pVector)
 		{
-			if ((l + 1) < (pUVector->size()))
+			if (iItem == iValue)
 			{
-				if ((pUVector->at(l)) > (pUVector->at(l + 1)))
-				{
-					Swap(pUVector->at(l), pUVector->at(l + 1));
-				}
-
+				return false;
 			}
 		}
 	}
-	
-}
-
-bool MergeSort::DoesNotHaveItem(int iItem)
-{
-	for (int iValue : *pSVector)
-	{
-		if (iItem == iValue)
-		{
-			return false;
-		}
-	}
 	return true;
-}
-
-void MergeSort::Swap(int& iA, int& iB)
-{
-	int iTemp = iA;
-	iA = iB;
-	iB = iTemp;
 }

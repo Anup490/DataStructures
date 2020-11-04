@@ -14,9 +14,8 @@ using namespace std;
 class MergeSort
 {
 	vector<int>* pSVector;
-	void Sort(vector<int>* pUVector);
-	bool DoesNotHaveItem(int iItem);
-	void Swap(int& iA, int&iB);
+	void Sort();
+	bool DoesNotHaveItem(vector<int>* pVector, int iItem);
 public:
 	MergeSort(vector<int>* pUVector);
 	vector<int>* GetSortedItems();

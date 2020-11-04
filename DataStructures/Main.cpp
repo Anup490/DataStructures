@@ -143,9 +143,9 @@ void test_red_black_tree()
 
 void test_merge_sort()
 {
-	vector<int> Vector({ 35,33,42,10,14,19,27,44,26,31,23,88,45,13,21,77 });
+	//vector<int> Vector({ 35,33,42,10,14,19,27,44,26,31,23,88,45,13,21,77 });
 	//vector<int> Vector({ 14,33,27,10,35,19,42,44 });
-	//vector<int> Vector({ 35,33,42,10,14,19,27,44,26,31 });
+	vector<int> Vector({ 35,33,42,10,14,19,27,44,26,31 });
 	MergeSort Sorter(&Vector);
 	vector<int>* pSortedVector = Sorter.GetSortedItems();
 	for (int i : *pSortedVector)
