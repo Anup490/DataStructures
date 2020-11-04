@@ -28,57 +28,75 @@ void MergeSort::Sort()
 			{
 				for (int k = (i + iPiece); k < (i + iItr); k++)
 				{
-					if ((k < (pSVector->size())) && (j < (pSVector->size())))
+					if (IsItemInFirstPositionLessThanSecond(j,k))
 					{
-						if ((pSVector->at(j)) < (pSVector->at(k)))
-						{
-							vBuffer.push_back(pSVector->at(j));
-							break;
-						}
-						else if(DoesNotHaveItem(&vBuffer, pSVector->at(k)))
-						{
-							vBuffer.push_back(pSVector->at(k));
-						}
-					}	
-				}
-				if ((j < (pSVector->size())) && DoesNotHaveItem(&vBuffer, pSVector->at(j)))
-				{
-					vBuffer.push_back(pSVector->at(j));
-				}
-			}
-			for (int l = (i + iPiece); l < (i + iItr); l++)
-			{
-				if (l < (pSVector->size()))
-				{
-					if (DoesNotHaveItem(&vBuffer, pSVector->at(l)))
+						AddToBufferAt(j, vBuffer);
+						break;
+					}
+					else 
 					{
-						vBuffer.push_back(pSVector->at(l));
+						AddToBufferAt(k, vBuffer);
 					}
 				}
+				AddToBufferAt(j, vBuffer);
 			}
-			for (int m = 0; m < (vBuffer.size()); m++)
-			{
-				if ((i+m) < (pSVector->size()))
-				{
-					pSVector->at(i + m) = vBuffer.at(m);
-				}
-			}
+			AddRemainingToBuffer(i + iPiece, i + iItr, vBuffer);
+			CopyToSVector(i, vBuffer);
 		}
 		iItr *= 2;
 	}
 }
 
-bool MergeSort::DoesNotHaveItem(vector<int>* pVector, int iItem)
+bool MergeSort::IsItemInFirstPositionLessThanSecond(int iPosition1, int iPosition2)
 {
-	if (pVector)
+	if ((iPosition1 < (pSVector->size())) && (iPosition2 < (pSVector->size())))
 	{
-		for (int iValue : *pVector)
+		return (pSVector->at(iPosition1)) < (pSVector->at(iPosition2));
+	}
+	return false;
+}
+
+void MergeSort::AddToBufferAt(int iPosition, vector<int>& vBuffer)
+{
+	if ((iPosition < (pSVector->size())) && DoesNotHaveItem(vBuffer, pSVector->at(iPosition)))
+	{
+		vBuffer.push_back(pSVector->at(iPosition));
+	}
+}
+
+bool MergeSort::DoesNotHaveItem(vector<int>& vVector, int iItem)
+{
+	for (int iValue : vVector)
+	{
+		if (iItem == iValue)
 		{
-			if (iItem == iValue)
-			{
-				return false;
-			}
+			return false;
 		}
 	}
 	return true;
+}
+
+void MergeSort::AddRemainingToBuffer(int iStart, int iEnd, vector<int>& vBuffer)
+{
+	for (int l = iStart; l < iEnd; l++)
+	{
+		if (l < (pSVector->size()))
+		{
+			if (DoesNotHaveItem(vBuffer, pSVector->at(l)))
+			{
+				vBuffer.push_back(pSVector->at(l));
+			}
+		}
+	}
+}
+
+void MergeSort::CopyToSVector(int iStart, vector<int>& vFrom)
+{
+	for (int m = 0; m < (vFrom.size()); m++)
+	{
+		if ((iStart + m) < (pSVector->size()))
+		{
+			pSVector->at(iStart + m) = vFrom.at(m);
+		}
+	}
 }
