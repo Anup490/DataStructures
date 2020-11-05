@@ -17,16 +17,16 @@ vector<int>* MergeSort::GetSortedItems()
 
 void MergeSort::Sort()
 {
-	int iItr = 2;
-	while ((iItr/2) <= (pSVector->size()))
+	int iIterationStep = 2;
+	int iPiece = iIterationStep / 2;
+	while (iPiece <= (pSVector->size()))
 	{
-		int iPiece = iItr / 2;
-		for (int i=0; i<(pSVector->size()); i+=iItr)
+		for (int i=0; i<(pSVector->size()); i+=iIterationStep)
 		{
 			vector<int> vBuffer;
 			for (int j = i; j < (i + iPiece); j++)
 			{
-				for (int k = (i + iPiece); k < (i + iItr); k++)
+				for (int k = (i + iPiece); k < (i + iIterationStep); k++)
 				{
 					if (IsItemInFirstPositionLessThanSecond(j,k))
 					{
@@ -40,10 +40,11 @@ void MergeSort::Sort()
 				}
 				AddToBufferAt(j, vBuffer);
 			}
-			AddRemainingToBuffer(i + iPiece, i + iItr, vBuffer);
+			AddRemainingToBuffer(i + iPiece, i + iIterationStep, vBuffer);
 			CopyToSVector(i, vBuffer);
 		}
-		iItr *= 2;
+		iIterationStep *= 2;
+		iPiece = iIterationStep / 2;
 	}
 }
 
