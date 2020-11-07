@@ -1,5 +1,6 @@
 #include "TreePrinter.h"
 #include "Tree.h"
+#include "RedBlackTree.h"
 #include <vector>
 #include <queue>
 #include <iostream>
@@ -56,7 +57,7 @@ void TreePrinter::Print()
 	{
 		Line* pLine = pLineVector->at(i);
 		PositionCursor(i == 0, iPreviousLineNo != pLine->GetLineNumber(), iInitialGaps);
-		cout << pLine->GetNode()->Value;
+		PrintLine(pLine);
 		iPreviousLineNo = pLine->GetLineNumber();
 	}
 }
@@ -66,6 +67,38 @@ void TreePrinter::CreateLines()
 	Line* pFirstLine = new Line(pTree->GetRootNode(), 1);
 	pLineQueue->push(pFirstLine);
 	AddLineToQueue(pLineQueue->front());
+}
+
+void TreePrinter::AddLineToQueue(Line* pLine)
+{
+	Node<int>* pNode = pLine->GetNode();
+	PushChildInQueue(pNode, ChildType::Left, pLine);
+	PushChildInQueue(pNode, ChildType::Right, pLine);
+	pLineVector->push_back(pLineQueue->front());
+	pLineQueue->pop();
+	if (!pLineQueue->empty())
+	{
+		AddLineToQueue(pLineQueue->front());
+	}
+}
+
+void TreePrinter::PushChildInQueue(Node<int>* pNode, ChildType Type, Line* pLine)
+{
+	if ((Type == ChildType::Left) && pNode && (pNode->LeftChild))
+	{
+		Line* pNewLine = new Line(pNode->LeftChild, pLine->GetLineNumber() + 1);
+		pLineQueue->push(pNewLine);
+	}
+	else if ((Type == ChildType::Right) && pNode && (pNode->RightChild))
+	{
+		Line* pNewLine = new Line(pNode->RightChild, pLine->GetLineNumber() + 1);
+		pLineQueue->push(pNewLine);
+	}
+	else if (pNode)
+	{
+		Line* pNewLine = new Line(nullptr, pLine->GetLineNumber() + 1);
+		pLineQueue->push(pNewLine);
+	}
 }
 
 void TreePrinter::PositionCursor(bool bIsFirstItem, bool bIsNewLine, int& iInitialGaps)
@@ -100,23 +133,35 @@ void TreePrinter::AddGaps(bool bChangeLine, int& iGaps)
 	}
 }
 
-void TreePrinter::AddLineToQueue(Line* pLine)
+void TreePrinter::PrintLine(Line* pLine)
 {
 	Node<int>* pNode = pLine->GetNode();
-	if (pNode->LeftChild)
+	if (pNode)
 	{
-		Line* pNewLine = new Line(pNode->LeftChild, pLine->GetLineNumber() + 1);
-		pLineQueue->push(pNewLine);
+		cout << pNode->Value << GetColorIfRedBlack(pLine->GetNode()) << " " << GetHeightIfRedBlack(pLine->GetNode());
 	}
-	if (pNode->RightChild)
+	else
 	{
-		Line* pNewLine = new Line(pNode->RightChild, pLine->GetLineNumber() + 1);
-		pLineQueue->push(pNewLine);
+		cout << " ";
 	}
-	pLineVector->push_back(pLineQueue->front());
-	pLineQueue->pop();
-	if (!pLineQueue->empty())
+}
+
+char TreePrinter::GetColorIfRedBlack(Node<int>* pNode)
+{
+	RedBlackNode* pRBNode = static_cast<RedBlackNode*>(pNode);
+	if (pRBNode)
 	{
-		AddLineToQueue(pLineQueue->front());
+		return (pRBNode->bIsRed) ? 'R' : 'B';
 	}
+	return 'X';
+}
+
+int TreePrinter::GetHeightIfRedBlack(Node<int>* pNode)
+{
+	RedBlackNode* pRBNode = static_cast<RedBlackNode*>(pNode);
+	if (pRBNode)
+	{
+		return pRBNode->iBlackHeight;
+	}
+	return 0;
 }

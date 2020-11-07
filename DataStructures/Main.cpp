@@ -1,9 +1,12 @@
 #include <iostream>
+#include <initializer_list>
+#include <vector>
 #include "TreePrinter.h"
 #include "Tree.h"
 #include "AVLTree.h"
 #include "Heap.h"
-#include <initializer_list>
+#include "RedBlackTree.h"
+#include "MergeSort.h"
 
 template<typename T>
 class TestTree : public Tree<T>
@@ -28,7 +31,7 @@ class TestTree : public Tree<T>
 		Node<T>* p5 = p2->RightChild;
 		p5->Value = 23;
 		p5->LeftChild = new Node<T>;
-
+											
 		Node<T>* p7 = p4->RightChild;
 		p7->Value = 14;
 		p7->LeftChild = new Node<T>;
@@ -94,7 +97,64 @@ void test_heap()
 	Printer.Print();
 }
 
+void test_red_black_tree()
+{
+	BinaryTree BTree;
+	BTree.Add(35);
+	BTree.Add(33);
+	BTree.Add(42);
+	BTree.Add(10);
+	BTree.Add(14);
+	BTree.Add(19);
+	BTree.Add(27);
+	BTree.Add(44);
+	BTree.Add(26);
+	BTree.Add(31);
+
+	AVLTree<int> AVL(&BTree);
+
+	RedBlackTree RBTree;
+	RBTree.Add(35);
+	RBTree.Add(33);
+	RBTree.Add(42);
+	RBTree.Add(10);
+	RBTree.Add(14);
+	RBTree.Add(19);
+	RBTree.Add(27);
+	RBTree.Add(44);
+	RBTree.Add(26);
+	RBTree.Add(31);
+
+	RBTree.Delete(27);
+
+	std::cout << "AVL TREE" << std::endl;
+	std::cout << "------------------------------------------------" << std::endl;
+	TreePrinter AVLTPrinter(&AVL);
+	AVLTPrinter.Print();
+	std::cout << std::endl;
+	std::cout << "------------------------------------------------" << std::endl;
+	std::cout << "RED BLACK TREE" << std::endl;
+	std::cout << "------------------------------------------------" << std::endl;
+	TreePrinter RBTPrinter(&RBTree);
+	RBTPrinter.Print();
+	std::cout << std::endl;
+	std::cout << "------------------------------------------------" << std::endl;
+}
+
+void test_merge_sort()
+{
+	vector<int> Vector({ 35,33,42,10,14,19,27,44,26,31,23,88,45,13,21,77,34,97,2 });
+	//vector<int> Vector({ 14,33,27,10,35,19,42,44 });
+	//vector<int> Vector({ 35,33,42,10,14,19,27,44,26,31 });
+	MergeSort Sorter(&Vector);
+	vector<int>* pSortedVector = Sorter.GetSortedItems();
+	for (int i : *pSortedVector)
+	{
+		cout << i << endl;
+	}
+}
+
 int main()
 {
-	test_heap();
+	test_merge_sort();
 }
