@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClInclude Include="AVLTree.h" />
     <ClInclude Include="BinaryTree.h" />
+    <ClInclude Include="HashTable.h" />
     <ClInclude Include="Heap.h" />
     <ClInclude Include="MergeSort.h" />
     <ClInclude Include="RedBlackTree.h" />

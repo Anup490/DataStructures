@@ -7,6 +7,7 @@
 #include "Heap.h"
 #include "RedBlackTree.h"
 #include "MergeSort.h"
+#include "HashTable.h"
 
 template<typename T>
 class TestTree : public Tree<T>
@@ -152,6 +153,11 @@ void test_merge_sort()
 	{
 		cout << i << endl;
 	}
+}
+
+void test_hash_table()
+{
+
 }
 
 int main()
