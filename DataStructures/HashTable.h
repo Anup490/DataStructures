@@ -66,19 +66,24 @@ private:
 		{
 			pList = new list<Entry<T>*>;
 			pList->push_back(pEntry);
-			int i = 0;
-			for (auto it = pVector->begin(); it != pVector->end(); it++)
+			ReplaceListAt(position, pList);
+		}
+	}
+
+	void ReplaceListAt(int position, list<Entry<T>*>* pList)
+	{
+		int i = 0;
+		for (auto it = pVector->begin(); it != pVector->end(); it++)
+		{
+			if (i == position)
 			{
-				if (i == position)
-				{
-					*it = pList;
-					break;
-				}
-				else
-				{
-					i++;
-					continue;
-				}
+				*it = pList;
+				break;
+			}
+			else
+			{
+				i++;
+				continue;
 			}
 		}
 	}
