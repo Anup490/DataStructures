@@ -19,7 +19,7 @@ struct Entry
 template<typename T>
 class HashTable
 {
-	vector* pVector;
+	vector<list<Entry<T>*>*>* pVector;
 public:
 	HashTable()
 	{
@@ -55,7 +55,7 @@ private:
 	{
 		if (position > pVector->size())
 		{
-			pVector->resize(position, NULL);
+			pVector->resize(position + 1, NULL);
 		}
 		list<Entry<T>*>* pList = pVector->at(position);
 		if (pList)
@@ -66,7 +66,20 @@ private:
 		{
 			pList = new list<Entry<T>*>;
 			pList->push_back(pEntry);
-			pVector[position] = pList;
+			int i = 0;
+			for (auto it = pVector->begin(); it != pVector->end(); it++)
+			{
+				if (i == position)
+				{
+					*it = pList;
+					break;
+				}
+				else
+				{
+					i++;
+					continue;
+				}
+			}
 		}
 	}
 

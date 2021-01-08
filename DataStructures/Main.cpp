@@ -157,10 +157,32 @@ void test_merge_sort()
 
 void test_hash_table()
 {
+	class : public HashKey
+	{
+		string* pKey;
+	public:
+		void SetKey(string* pStringKey)
+		{
+			pKey = pStringKey;
+		}
 
+		int GetHashValue() override
+		{
+			return pKey->length();
+		}
+	} TestKey;
+
+	HashTable<string> Table;
+	string data = "Nicolette Shea";
+	TestKey.SetKey(&data);
+	Entry<string> entry = { &TestKey, data };
+	Table.AddItem(&entry);
+	cout << "Stored data is " << data << endl;
+	string retrievedData = Table.GetItem(&TestKey);
+	cout << "Retrieved data is " << retrievedData << endl;
 }
 
 int main()
 {
-	test_merge_sort();
+	test_hash_table();
 }
