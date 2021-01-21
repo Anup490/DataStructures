@@ -184,5 +184,5 @@ void test_hash_table()
 
 int main()
 {
-	test_hash_table();
+	test_red_black_tree();
 }

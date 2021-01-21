@@ -350,7 +350,7 @@ BalanceStrategy RedBlackTree::GetBalanceStrategyForDeletion(RedBlackNode* pParen
 	{
 		return ((pParent->LeftChild) == pChild)? BalanceStrategy::LeftRotation: BalanceStrategy::RightRotation;
 	}
-	else if (IsRedOrNullNode(pChild->LeftChild) || IsRedOrNullNode(pChild->RightChild))
+	else if (!IsRedNode(pChild->LeftChild) && !IsRedNode(pChild->RightChild))
 	{
 		return ((pParent->LeftChild) == pChild) ? BalanceStrategy::LeftRecolour : BalanceStrategy::RightRecolour;
 	}
@@ -363,11 +363,6 @@ BalanceStrategy RedBlackTree::GetBalanceStrategyForDeletion(RedBlackNode* pParen
 		return (ToRedBlackNode(pChild->LeftChild)->bIsRed) ? BalanceStrategy::LeftRotation : BalanceStrategy::RightLeftRotation;
 	}
 	return BalanceStrategy::None;
-}
-
-bool RedBlackTree::IsRedOrNullNode(Node<int>* pNode)
-{
-	return (!pNode || IsRedNode(pNode));
 }
 
 void RedBlackTree::ApplyBalanceStrategyForDeletion(RedBlackNode* pNode, RedBlackNode* pParent, BalanceStrategy Strategy)

@@ -41,7 +41,6 @@ class RedBlackTree : public BinaryTree
 	RedBlackNode* GetSiblingOfDoubleBlack(RedBlackNode* pNode);
 	bool IsChildDoubleBlack(RedBlackNode* pNode, RedBlackNode* pChild);
 	BalanceStrategy GetBalanceStrategyForDeletion(RedBlackNode* pParent, RedBlackNode* pChild);
-	bool IsRedOrNullNode(Node<int>* pNode);
 	void ApplyBalanceStrategyForDeletion(RedBlackNode* pNode, RedBlackNode* pParent, BalanceStrategy Strategy);
 	RedBlackNode* ToRedBlackNode(Node<int>* pNode);
 public:
